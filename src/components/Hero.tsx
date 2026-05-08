@@ -43,7 +43,7 @@ export function Hero() {
 
         <h1 className="sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.05] tracking-tight mb-8 text-balance px-0 mx-0 text-left text-3xl font-light">Меблировка квартир под ключ Новосибирск</h1>
 
-        <p className="text-white/70 text-lg md:text-xl leading-relaxed mb-12 max-w-2xl mx-auto font-light">
+        <p className="text-white/70 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto font-light py-[3px] my-9">
           Собственное производство мебели в Новосибирске. Проектируем, изготавливаем и монтируем — от эконома до премиума.
         </p>
 
@@ -66,7 +66,7 @@ export function Hero() {
           </a>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-x-8 gap-y-3">
+        <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 my-0 py-8">
           {[
             "Собственное производство",
             "Фиксированная стоимость",
