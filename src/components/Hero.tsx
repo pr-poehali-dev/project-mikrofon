@@ -82,7 +82,7 @@ export function Hero() {
             "Полная комплектация",
             "Эконом — Premium",
           ].map((item) => (
-            <div key={item} className="flex items-center gap-2 text-white/70 text-sm">
+            <div key={item} className="flex items-center gap-2 text-white/70 text-sm lg:text-lg">
               <span className="text-stone-300">✓</span>
               <span>{item}</span>
             </div>
