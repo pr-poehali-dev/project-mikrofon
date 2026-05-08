@@ -1,38 +1,50 @@
 import { ArrowRight } from "lucide-react"
-import { HighlightedText } from "./HighlightedText"
 
 export function CallToAction() {
   return (
-    <section id="contact" className="py-32 md:py-29 bg-foreground text-primary-foreground">
-      <div className="container mx-auto px-6 md:px-12">
+    <section id="contact" className="py-32 md:py-40 bg-foreground text-primary-foreground relative overflow-hidden">
+      <div className="absolute inset-0 opacity-5">
+        <img
+          src="https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/files/0c99552f-be17-4b7a-955c-84ea311c3bad.jpg"
+          className="w-full h-full object-cover"
+          alt=""
+        />
+      </div>
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-primary-foreground/60 text-sm tracking-[0.3em] uppercase mb-8">Начать проект</p>
+          <p className="text-primary-foreground/50 text-sm tracking-[0.3em] uppercase mb-8">Начать проект</p>
 
           <h2 className="text-3xl md:text-4xl lg:text-6xl font-medium leading-[1.1] tracking-tight mb-8 text-balance">
-            Готовы создать
+            Заезжайте в полностью готовую квартиру
             <br />
-            нечто <HighlightedText>выдающееся</HighlightedText>?
+            <span className="text-stone-400">без стресса и поисков мебели</span>
           </h2>
 
-          <p className="text-primary-foreground/70 text-lg md:text-xl leading-relaxed mb-12 max-w-2xl mx-auto">
-            Давайте обсудим, как воплотить вашу идею в жизнь. Каждое великое пространство начинается с разговора.
+          <p className="text-primary-foreground/60 text-lg md:text-xl leading-relaxed mb-12 max-w-2xl mx-auto">
+            Оставьте заявку — мы свяжемся в течение 30 минут, ответим на вопросы и назначим бесплатный замер.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="mailto:hello@prostranstvo.ru"
+              href="tel:+73831234567"
               className="inline-flex items-center justify-center gap-3 bg-primary-foreground text-foreground px-8 py-4 text-sm tracking-wide hover:bg-primary-foreground/90 transition-colors duration-300 group"
             >
-              Начать диалог
+              Получить расчет проекта
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </a>
             <a
-              href="tel:+74951234567"
+              href="https://wa.me/73831234567"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 border border-primary-foreground/30 px-8 py-4 text-sm tracking-wide hover:bg-primary-foreground/10 transition-colors duration-300"
             >
-              Назначить звонок
+              Написать в WhatsApp
             </a>
           </div>
+
+          <p className="text-primary-foreground/30 text-sm mt-8">
+            Бесплатная консультация · Выезд на замер · Без обязательств
+          </p>
         </div>
       </div>
     </section>

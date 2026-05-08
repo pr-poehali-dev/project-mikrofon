@@ -3,23 +3,24 @@ import { HighlightedText } from "./HighlightedText"
 
 const philosophyItems = [
   {
-    title: "Минимализм со смыслом",
+    title: "Новостройки",
     description:
-      "Каждый элемент имеет свое назначение и пространство для дыхания. Мы убираем лишнее, чтобы раскрыть то, что действительно важно.",
+      "Помогаем жильцам новых ЖК въехать в полностью готовую квартиру. Берём на себя всё — от обмеров до последнего светильника.",
   },
   {
-    title: "Архитектурный подход",
+    title: "Семейные квартиры",
     description:
-      "Планировки, вдохновленные структурой, ритмом и материальностью. Здания, которые говорят через пропорции и свет.",
+      "Продумываем пространство с учетом реальной жизни семьи: удобные кухни, вместительные гардеробные, функциональные детские.",
   },
   {
-    title: "Естественная динамика",
+    title: "Студии под аренду",
     description:
-      "Движение поддерживает восприятие, но никогда не отвлекает. Анимация, которая ощущается естественно, как свет, скользящий по комнате.",
+      "Создаем стильное и долговечное оснащение для арендных квартир. Быстро, с умом и в рамках бюджета.",
   },
   {
-    title: "Вневременная эстетика",
-    description: "Элегантный, спокойный и долговечный визуальный язык. Дизайн, который превосходит тренды и стареет с достоинством.",
+    title: "Премиальные интерьеры",
+    description:
+      "Индивидуальные дизайнерские решения для тех, кто ценит материалы, детали и авторский подход к пространству.",
   },
 ]
 
@@ -51,28 +52,26 @@ export function Philosophy() {
     <section id="about" className="py-32 md:py-29">
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
-          {/* Left column - Title and image */}
           <div className="lg:sticky lg:top-32 lg:self-start">
-            <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6">Наша философия</p>
+            <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6">Для кого мы работаем</p>
             <h2 className="text-6xl md:text-6xl font-medium leading-[1.15] tracking-tight mb-6 text-balance lg:text-8xl">
-              Дизайн с
+              Квартира
               <br />
-              <HighlightedText>намерением</HighlightedText>
+              <HighlightedText>готова</HighlightedText>
             </h2>
 
             <div className="relative hidden lg:block">
               <img
-                src="/images/exterior.png"
-                alt="Архитектурный эскиз рабочего пространства"
-                className="opacity-90 relative z-10 w-auto"
+                src="https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/files/b300f37b-885e-4dd7-a539-0e29716bc4dd.jpg"
+                alt="Спальня с авторской мебелью"
+                className="opacity-90 relative z-10 w-full h-64 object-cover"
               />
             </div>
           </div>
 
-          {/* Right column - Description and Philosophy items */}
           <div className="space-y-6 lg:pt-48">
             <p className="text-muted-foreground text-lg leading-relaxed max-w-md mb-12">
-              Архитектура - это больше, чем конструкция. Это то, как мы воспринимаем мир. Мы создаем пространства, которые питают человеческий дух.
+              Мы работаем с жителями Новосибирска, которые купили квартиру и хотят заехать в красивое, готовое пространство — без бесконечных поездок по магазинам и стресса с подрядчиками.
             </p>
 
             {philosophyItems.map((item, index) => (

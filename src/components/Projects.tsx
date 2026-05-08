@@ -4,35 +4,43 @@ import { ArrowUpRight } from "lucide-react"
 const projects = [
   {
     id: 1,
-    title: "Резиденция Светлая",
-    category: "Жилой дом",
-    location: "Москва, Россия",
-    year: "2024",
-    image: "/images/hously-1.png",
+    title: "ЖК Flora & Fauna",
+    category: "Меблировка 2-комнатной",
+    area: "68 м²",
+    style: "Современный минимализм",
+    price: "от 1 200 000 ₽",
+    duration: "45 дней",
+    image: "https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/files/d69e0f91-34a7-406a-9237-6fcd5f4eff14.jpg",
   },
   {
     id: 2,
-    title: "Павильон Стекло",
-    category: "Коммерческий объект",
-    location: "Санкт-Петербург, Россия",
-    year: "2023",
-    image: "/images/hously-2.png",
+    title: "ЖК Richmond Residence",
+    category: "Кухня + гостиная",
+    area: "94 м²",
+    style: "Премиальный лофт",
+    price: "от 2 400 000 ₽",
+    duration: "60 дней",
+    image: "https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/files/8426680a-307d-45da-8165-d3657d15b1d0.jpg",
   },
   {
     id: 3,
-    title: "Дом у моря",
-    category: "Жилой дом",
-    location: "Сочи, Россия",
-    year: "2023",
-    image: "/images/hously-3.png",
+    title: "ЖК Европейский берег",
+    category: "Полная комплектация",
+    area: "112 м²",
+    style: "Скандинавский стиль",
+    price: "от 3 100 000 ₽",
+    duration: "75 дней",
+    image: "https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/files/0c99552f-be17-4b7a-955c-84ea311c3bad.jpg",
   },
   {
     id: 4,
-    title: "Северный приют",
-    category: "Гостиничный комплекс",
-    location: "Казань, Россия",
-    year: "2024",
-    image: "/images/hously-4.png",
+    title: "ЖК Оазис",
+    category: "Гардеробная + спальня",
+    area: "55 м²",
+    style: "Теплый минимализм",
+    price: "от 890 000 ₽",
+    duration: "35 дней",
+    image: "https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/files/7f5e34e0-5f57-4573-8603-4e5608f65a42.jpg",
   },
 ]
 
@@ -68,14 +76,14 @@ export function Projects() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
           <div>
-            <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6">Избранные работы</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight">Наши проекты</h2>
+            <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6">Реализованные проекты</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight">Наши работы<br/>в Новосибирске</h2>
           </div>
           <a
-            href="#"
+            href="#contact"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
           >
-            Смотреть все проекты
+            Обсудить ваш проект
             <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
         </div>
@@ -103,16 +111,23 @@ export function Projects() {
                     transition: "transform 1.5s cubic-bezier(0.76, 0, 0.24, 1)",
                   }}
                 />
+                <div className={`absolute inset-0 bg-black/40 flex items-end p-6 transition-opacity duration-300 ${hoveredId === project.id ? "opacity-100" : "opacity-0"}`}>
+                  <div className="text-white">
+                    <p className="text-sm text-white/70 mb-1">{project.area} · {project.style}</p>
+                    <p className="text-lg font-medium">{project.price}</p>
+                    <p className="text-sm text-white/70">Срок: {project.duration}</p>
+                  </div>
+                </div>
               </div>
 
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h3 className="text-xl font-medium mb-2 group-hover:underline underline-offset-4">{project.title}</h3>
                   <p className="text-muted-foreground text-sm">
-                    {project.category} · {project.location}
+                    {project.category} · {project.area}
                   </p>
                 </div>
-                <span className="text-muted-foreground/60 text-sm">{project.year}</span>
+                <span className="text-muted-foreground/60 text-sm">{project.duration}</span>
               </div>
             </article>
           ))}
