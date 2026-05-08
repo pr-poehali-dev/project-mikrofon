@@ -105,7 +105,7 @@ export function Hero() {
                     <input
                       type="tel"
                       required
-                      placeholder="+7 (383) ___-__-__"
+                      placeholder="+7 ___-___-__-__"
                       value={form.phone}
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}
                       className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
@@ -114,7 +114,7 @@ export function Hero() {
                   <div>
                     <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">Способ связи</label>
                     <div className="flex gap-2">
-                      {["MAX", "Telegram", "VK"].map((channel) => (
+                      {["MAX", "Telegram"].map((channel) => (
                         <button
                           key={channel}
                           type="button"
