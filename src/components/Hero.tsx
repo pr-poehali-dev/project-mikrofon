@@ -1,4 +1,16 @@
+import { useState } from "react"
+import { X } from "lucide-react"
+
 export function Hero() {
+  const [open, setOpen] = useState(false)
+  const [form, setForm] = useState({ name: "", phone: "", comment: "" })
+  const [sent, setSent] = useState(false)
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setSent(true)
+  }
+
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
@@ -24,12 +36,12 @@ export function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <a
-            href="#contact"
+          <button
+            onClick={() => { setOpen(true); setSent(false) }}
             className="inline-flex items-center justify-center gap-2 bg-white text-foreground px-8 py-4 text-sm tracking-widest uppercase font-medium hover:bg-stone-100 transition-colors duration-300"
           >
             Рассчитать проект
-          </a>
+          </button>
           <a
             href="#contact"
             className="inline-flex items-center justify-center gap-2 border border-white/40 text-white px-8 py-4 text-sm tracking-widest uppercase font-medium hover:bg-white/10 transition-colors duration-300"
@@ -52,6 +64,88 @@ export function Hero() {
           ))}
         </div>
       </div>
+
+      {open && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          onClick={(e) => { if (e.target === e.currentTarget) setOpen(false) }}
+        >
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
+
+          <div className="relative bg-background w-full max-w-md p-8 md:p-10 shadow-2xl">
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-5 right-5 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <X size={20} />
+            </button>
+
+            {!sent ? (
+              <>
+                <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">Бесплатный расчёт</p>
+                <h2 className="text-2xl font-medium tracking-tight mb-2">Рассчитать проект</h2>
+                <p className="text-muted-foreground text-sm leading-relaxed mb-8">
+                  Оставьте заявку — свяжемся в течение 30 минут, обсудим квартиру и назначим замер.
+                </p>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">Ваше имя</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Иван"
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">Телефон</label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="+7 (383) ___-__-__"
+                      value={form.phone}
+                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">ЖК / Площадь (необязательно)</label>
+                    <input
+                      type="text"
+                      placeholder="ЖК Flora, 68 м²"
+                      value={form.comment}
+                      onChange={(e) => setForm({ ...form, comment: e.target.value })}
+                      className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-foreground text-primary-foreground py-4 text-sm tracking-widest uppercase font-medium hover:bg-foreground/90 transition-colors duration-300 mt-2"
+                  >
+                    Отправить заявку
+                  </button>
+                  <p className="text-muted-foreground text-xs text-center">
+                    Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности
+                  </p>
+                </form>
+              </>
+            ) : (
+              <div className="text-center py-8">
+                <div className="w-12 h-12 bg-foreground flex items-center justify-center mx-auto mb-6">
+                  <span className="text-primary-foreground text-xl">✓</span>
+                </div>
+                <h2 className="text-2xl font-medium tracking-tight mb-3">Заявка отправлена</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Свяжемся с вами в течение 30 минут. Спасибо!
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </section>
   )
 }
