@@ -107,7 +107,7 @@ export function Header() {
               <li key={item.label}>
                 <a
                   href={item.href}
-                  className="hover:text-stone-300 transition-colors duration-300 text-white text-4xl font-light block"
+                  className="hover:text-stone-300 transition-colors duration-300 text-white font-light block text-xl"
                   onClick={closeMobileMenu}
                 >
                   {item.label}
