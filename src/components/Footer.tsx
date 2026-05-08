@@ -5,7 +5,8 @@ export function Footer() {
         <div className="grid md:grid-cols-4 gap-12 mb-16">
           <div className="md:col-span-2">
             <a href="/" className="inline-block mb-6">
-              <span className="text-foreground font-medium tracking-[0.2em] text-sm uppercase">FORMA</span>
+              <span className="text-foreground font-medium tracking-[0.2em] text-sm uppercase">Мастерская
+Современной Мебели</span>
             </a>
             <p className="text-muted-foreground leading-relaxed max-w-sm mb-4">
               Меблировка квартир под ключ в Новосибирске. Кухни, гардеробные, мебель для всей квартиры — производство, доставка, монтаж.
