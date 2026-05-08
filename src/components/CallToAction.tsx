@@ -37,9 +37,7 @@ export function CallToAction() {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 border border-primary-foreground/30 px-8 py-4 text-sm tracking-wide hover:bg-primary-foreground/10 transition-colors duration-300"
-            >
-              Написать в WhatsApp
-            </a>
+            >Написать в MAX</a>
           </div>
 
           <p className="text-primary-foreground/30 text-sm mt-8">
