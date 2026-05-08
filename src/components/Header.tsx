@@ -36,7 +36,7 @@ export function Header() {
           <img
             src="https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/bucket/61052267-e6c5-4719-949e-d25cac3ec242.png"
             alt="Мастерская современной мебели"
-            className="h-10 sm:h-12 md:h-14 w-auto object-contain"
+            className="h-[54px] sm:h-[65px] md:h-[76px] w-auto object-contain"
           />
         </a>
 
