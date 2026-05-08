@@ -32,8 +32,12 @@ export function Header() {
       )}
     >
       <nav className="container mx-auto px-6 flex items-center justify-between md:px-[24]">
-        <a href="/" className="flex items-center gap-2 group" onClick={scrollToTop}>
-          <span className="text-white font-medium tracking-[0.2em] text-sm uppercase">FORMA</span>
+        <a href="/" className="flex items-center group" onClick={scrollToTop}>
+          <img
+            src="https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/bucket/61052267-e6c5-4719-949e-d25cac3ec242.png"
+            alt="Мастерская современной мебели"
+            className="h-10 sm:h-12 md:h-14 w-auto object-contain"
+          />
         </a>
 
         <ul className="hidden md:flex items-center gap-10 text-sm tracking-wide">
