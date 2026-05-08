@@ -1,10 +1,8 @@
 import { useState, useRef } from "react"
-import { X } from "lucide-react"
+import { LeadModal } from "./LeadModal"
 
 export function Hero() {
   const [open, setOpen] = useState(false)
-  const [form, setForm] = useState({ name: "", phone: "", comment: "" })
-  const [sent, setSent] = useState(false)
   const pressTime = useRef<number>(0)
   const calcPressTime = useRef<number>(0)
 
@@ -27,12 +25,6 @@ export function Hero() {
     const elapsed = Date.now() - calcPressTime.current
     if (!e.isTrusted || elapsed < 80 || elapsed > 3000) return
     setOpen(true)
-    setSent(false)
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setSent(true)
   }
 
   return (
@@ -47,15 +39,17 @@ export function Hero() {
       </div>
 
       <div className="container mx-auto px-6 md:px-12 relative z-10 text-center max-w-5xl my-0 py-[66px]">
-        <p className="tracking-[0.35em] uppercase text-white/60 my-0 py-5 text-xs text-center font-light">Новосибирск
- · Меблировка под ключ за 30 дней ·</p>
+        <p className="tracking-[0.35em] uppercase text-white/60 my-0 py-5 text-xs text-center font-light">Новосибирск</p>
 
-        <h1 className="text-balance text-white mb-6 tracking-tight leading-[1.05] lg:text-7xl md:text-6xl font-light text-left text-3xl">Меблировка  квартир
-под ключ Новосибирск</h1>
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium text-white leading-[1.05] tracking-tight mb-8 text-balance">
+          Мебель и интерьер
+          <br />
+          <span className="text-stone-300">под ключ</span>
+        </h1>
 
-        <p className="text-white/70 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-10 text-left">Создаем полностью готовые пространства для жизни — от кухни до гардеробной. 
-
-Дизайн, производство, доставка и установка под ключ за 30 дней .</p>
+        <p className="text-white/70 text-lg md:text-xl leading-relaxed mb-12 max-w-2xl mx-auto font-light">
+          Собственное производство мебели в Новосибирске. Проектируем, изготавливаем и монтируем — от эконома до премиума.
+        </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
           <button
@@ -63,13 +57,14 @@ export function Hero() {
             onClick={handleCalcClick}
             className="inline-flex items-center justify-center gap-2 bg-white text-foreground px-8 py-4 text-sm tracking-widest uppercase font-medium hover:bg-stone-100 transition-colors duration-300"
           >
-            Рассчитать проект
+            Рассчитать стоимость
           </button>
+
           <a
             href="https://max.ru/id421714233013_bot"
             onMouseDown={handleMaxMouseDown}
             onClick={handleMaxClick}
-            className="inline-flex items-center justify-center gap-2 border border-white/40 text-white px-8 py-4 text-sm tracking-widest uppercase font-medium hover:bg-white/10 transition-colors duration-300 cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 border border-white/40 text-white px-8 py-4 text-sm tracking-widest uppercase font-light hover:bg-white/10 transition-colors duration-300"
           >
             Получить концепцию в MAX
           </a>
@@ -90,96 +85,7 @@ export function Hero() {
         </div>
       </div>
 
-      {open && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center px-4"
-          onClick={(e) => { if (e.target === e.currentTarget) setOpen(false) }}
-        >
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
-
-          <div className="relative bg-background w-full max-w-md p-8 md:p-10 shadow-2xl">
-            <button
-              onClick={() => setOpen(false)}
-              className="absolute top-5 right-5 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <X size={20} />
-            </button>
-
-            {!sent ? (
-              <>
-                <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">Бесплатный расчёт</p>
-                <h2 className="text-2xl font-medium tracking-tight mb-2">Рассчитать проект</h2>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-8">
-                  Оставьте заявку — свяжемся в течение 30 минут, обсудим квартиру и назначим замер.
-                </p>
-
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">Ваше имя</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Иван"
-                      value={form.name}
-                      onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">Телефон</label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="+7 ___-___-__-__"
-                      value={form.phone}
-                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                      className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">Способ связи</label>
-                    <div className="flex gap-2">
-                      {["MAX", "Telegram"].map((channel) => (
-                        <button
-                          key={channel}
-                          type="button"
-                          onClick={() => setForm({ ...form, comment: channel })}
-                          className={`flex-1 py-3 text-sm border transition-colors duration-200 ${
-                            form.comment === channel
-                              ? "bg-foreground text-primary-foreground border-foreground"
-                              : "border-border text-foreground hover:border-foreground"
-                          }`}
-                        >
-                          {channel}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full bg-foreground text-primary-foreground py-4 text-sm tracking-widest uppercase font-medium hover:bg-foreground/90 transition-colors duration-300 mt-2"
-                  >
-                    Отправить заявку
-                  </button>
-                  <p className="text-muted-foreground text-xs text-center">
-                    Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности
-                  </p>
-                </form>
-              </>
-            ) : (
-              <div className="text-center py-8">
-                <div className="w-12 h-12 bg-foreground flex items-center justify-center mx-auto mb-6">
-                  <span className="text-primary-foreground text-xl">✓</span>
-                </div>
-                <h2 className="text-2xl font-medium tracking-tight mb-3">Заявка отправлена</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  Свяжемся с вами в течение 30 минут. Спасибо!
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      <LeadModal open={open} onClose={() => setOpen(false)} />
     </section>
   )
 }

@@ -1,6 +1,21 @@
+import { useState, useRef } from "react"
 import { ArrowRight } from "lucide-react"
+import { LeadModal } from "./LeadModal"
 
 export function CallToAction() {
+  const [open, setOpen] = useState(false)
+  const pressTime = useRef<number>(0)
+
+  const handleMouseDown = () => {
+    pressTime.current = Date.now()
+  }
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const elapsed = Date.now() - pressTime.current
+    if (!e.isTrusted || elapsed < 80 || elapsed > 3000) return
+    setOpen(true)
+  }
+
   return (
     <section id="contact" className="py-32 md:py-40 bg-foreground text-primary-foreground relative overflow-hidden">
       <div className="absolute inset-0 opacity-5">
@@ -25,15 +40,16 @@ export function CallToAction() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="tel:+73831234567"
+            <button
+              onMouseDown={handleMouseDown}
+              onClick={handleClick}
               className="inline-flex items-center justify-center gap-3 bg-primary-foreground text-foreground px-8 py-4 text-sm tracking-wide hover:bg-primary-foreground/90 transition-colors duration-300 group"
             >
               Получить расчет проекта
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </a>
+            </button>
             <a
-              href="https://wa.me/73831234567"
+              href="https://max.ru/id421714233013_bot"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 border border-primary-foreground/30 px-8 py-4 text-sm tracking-wide hover:bg-primary-foreground/10 transition-colors duration-300"
@@ -45,6 +61,8 @@ export function CallToAction() {
           </p>
         </div>
       </div>
+
+      <LeadModal open={open} onClose={() => setOpen(false)} />
     </section>
   )
 }
