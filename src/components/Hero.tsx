@@ -6,6 +6,7 @@ export function Hero() {
   const [form, setForm] = useState({ name: "", phone: "", comment: "" })
   const [sent, setSent] = useState(false)
   const pressTime = useRef<number>(0)
+  const calcPressTime = useRef<number>(0)
 
   const handleMaxMouseDown = () => {
     pressTime.current = Date.now()
@@ -16,6 +17,17 @@ export function Hero() {
     const elapsed = Date.now() - pressTime.current
     if (!e.isTrusted || elapsed < 80 || elapsed > 3000) return
     window.open("https://max.ru/id421714233013_bot", "_blank", "noopener,noreferrer")
+  }
+
+  const handleCalcMouseDown = () => {
+    calcPressTime.current = Date.now()
+  }
+
+  const handleCalcClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const elapsed = Date.now() - calcPressTime.current
+    if (!e.isTrusted || elapsed < 80 || elapsed > 3000) return
+    setOpen(true)
+    setSent(false)
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -49,7 +61,8 @@ export function Hero() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
           <button
-            onClick={() => { setOpen(true); setSent(false) }}
+            onMouseDown={handleCalcMouseDown}
+            onClick={handleCalcClick}
             className="inline-flex items-center justify-center gap-2 bg-white text-foreground px-8 py-4 text-sm tracking-widest uppercase font-medium hover:bg-stone-100 transition-colors duration-300"
           >
             Рассчитать проект
