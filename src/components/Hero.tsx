@@ -47,7 +47,9 @@ export function Hero() {
       </div>
 
       <div className="container mx-auto px-6 md:px-12 relative z-10 text-center max-w-5xl">
-        <p className="text-sm tracking-[0.35em] uppercase text-white/60 mb-6">Новосибирск · Меблировка под ключ</p>
+        <p className="text-sm tracking-[0.35em] uppercase text-white/60 mb-6">Новосибирск · Меблировка под ключ за 30 дней · 
+
+</p>
 
         <h1 className="text-5xl font-medium text-balance text-center text-white mb-6 tracking-tight leading-[1.05] lg:text-7xl md:text-6xl">
           Меблировка квартир
@@ -55,9 +57,8 @@ export function Hero() {
           <span className="text-stone-300">под ключ</span>
         </h1>
 
-        <p className="text-white/70 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-10">
-          Создаем полностью готовые пространства для жизни — от кухни до гардеробной. Дизайн, производство, доставка и установка под ключ.
-        </p>
+        <p className="text-white/70 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-10">Создаем полностью готовые пространства для жизни — от кухни до гардеробной. 
+Дизайн, производство, доставка и установка под ключ за 30 дней .</p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
           <button
