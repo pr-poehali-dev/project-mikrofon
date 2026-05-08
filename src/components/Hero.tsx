@@ -55,7 +55,7 @@ export function Hero() {
           <button
             onMouseDown={handleCalcMouseDown}
             onClick={handleCalcClick}
-            className="inline-flex items-center justify-center gap-2 bg-white text-foreground px-8 py-4 text-sm tracking-widest uppercase font-medium hover:bg-stone-100 transition-colors duration-300"
+            className="inline-flex items-center justify-center gap-2 bg-white text-foreground px-8 text-sm tracking-widest uppercase font-medium hover:bg-stone-100 transition-colors duration-300 my-0 py-5"
           >
             Рассчитать стоимость
           </button>
@@ -64,7 +64,7 @@ export function Hero() {
             href="https://max.ru/id421714233013_bot"
             onMouseDown={handleMaxMouseDown}
             onClick={handleMaxClick}
-            className="inline-flex items-center justify-center gap-2 border border-white/40 text-white px-8 py-4 text-sm tracking-widest uppercase font-light hover:bg-white/10 transition-colors duration-300"
+            className="inline-flex items-center justify-center gap-2 border border-white/40 text-white px-8 text-sm tracking-widest uppercase font-light hover:bg-white/10 transition-colors duration-300 py-2.5"
           >
             Получить концепцию в MAX
           </a>
