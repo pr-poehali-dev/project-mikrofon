@@ -39,7 +39,7 @@ export function LeadModal({ open, onClose }: LeadModalProps) {
 
         {!sent ? (
           <>
-            <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">Бесплатный расчёт</p>
+            <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">Предварительный расчет</p>
             <h2 className="text-2xl font-medium tracking-tight mb-2">Рассчитать проект</h2>
             <p className="text-muted-foreground text-sm leading-relaxed mb-8">
               Оставьте заявку — свяжемся в течение 30 минут, обсудим квартиру и назначим замер.
