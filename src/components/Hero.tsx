@@ -43,10 +43,12 @@ export function Hero() {
             Рассчитать проект
           </button>
           <a
-            href="#contact"
+            href="https://max.ru/id421714233013_bot"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 border border-white/40 text-white px-8 py-4 text-sm tracking-widest uppercase font-medium hover:bg-white/10 transition-colors duration-300"
           >
-            Получить концепцию
+            Получить концепцию в MAX
           </a>
         </div>
 
