@@ -112,14 +112,23 @@ export function Hero() {
                     />
                   </div>
                   <div>
-                    <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">ЖК / Площадь (необязательно)</label>
-                    <input
-                      type="text"
-                      placeholder="ЖК Flora, 68 м²"
-                      value={form.comment}
-                      onChange={(e) => setForm({ ...form, comment: e.target.value })}
-                      className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
-                    />
+                    <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">Способ связи</label>
+                    <div className="flex gap-2">
+                      {["MAX", "Telegram", "VK"].map((channel) => (
+                        <button
+                          key={channel}
+                          type="button"
+                          onClick={() => setForm({ ...form, comment: channel })}
+                          className={`flex-1 py-3 text-sm border transition-colors duration-200 ${
+                            form.comment === channel
+                              ? "bg-foreground text-primary-foreground border-foreground"
+                              : "border-border text-foreground hover:border-foreground"
+                          }`}
+                        >
+                          {channel}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                   <button
                     type="submit"
