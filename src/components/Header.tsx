@@ -55,7 +55,7 @@ export function Header() {
             <li key={item.label}>
               <a
                 href={item.href}
-                className="hover:text-stone-300 transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 hover:after:w-full after:bg-stone-300 after:transition-all after:duration-300 text-white"
+                className="hover:text-stone-300 transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 hover:after:w-full after:bg-stone-300 after:transition-all after:duration-300 text-white text-lg"
               >
                 {item.label}
               </a>
