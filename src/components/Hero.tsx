@@ -1,10 +1,22 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { X } from "lucide-react"
 
 export function Hero() {
   const [open, setOpen] = useState(false)
   const [form, setForm] = useState({ name: "", phone: "", comment: "" })
   const [sent, setSent] = useState(false)
+  const pressTime = useRef<number>(0)
+
+  const handleMaxMouseDown = () => {
+    pressTime.current = Date.now()
+  }
+
+  const handleMaxClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    const elapsed = Date.now() - pressTime.current
+    if (!e.isTrusted || elapsed < 80 || elapsed > 3000) return
+    window.open("https://max.ru/id421714233013_bot", "_blank", "noopener,noreferrer")
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -44,9 +56,9 @@ export function Hero() {
           </button>
           <a
             href="https://max.ru/id421714233013_bot"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 border border-white/40 text-white px-8 py-4 text-sm tracking-widest uppercase font-medium hover:bg-white/10 transition-colors duration-300"
+            onMouseDown={handleMaxMouseDown}
+            onClick={handleMaxClick}
+            className="inline-flex items-center justify-center gap-2 border border-white/40 text-white px-8 py-4 text-sm tracking-widest uppercase font-medium hover:bg-white/10 transition-colors duration-300 cursor-pointer"
           >
             Получить концепцию в MAX
           </a>
