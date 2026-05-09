@@ -54,7 +54,7 @@ export function Footer() {
                 <a href="tel:+73831234567" className="hover:text-foreground transition-colors">+7 (913) 431-05-55</a>
               </li>
               <li>
-                <a href="https://wa.me/73831234567" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                <a href="https://max.ru/u/f9LHodD0cOL1PbwV-gcwhH0uDPPh7fYs6mEO6mT9skVfTgi3h9x92puP1aU" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
                   WhatsApp
                 </a>
               </li>
