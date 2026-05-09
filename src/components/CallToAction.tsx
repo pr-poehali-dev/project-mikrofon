@@ -6,13 +6,13 @@ export function CallToAction() {
   const [open, setOpen] = useState(false)
   const pressTime = useRef<number>(0)
 
-  const handleMouseDown = () => {
-    pressTime.current = Date.now()
-  }
+  const handleMouseDown = () => { pressTime.current = Date.now() }
+  const handleTouchStart = () => { pressTime.current = Date.now() }
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const elapsed = Date.now() - pressTime.current
-    if (!e.isTrusted || elapsed < 80 || elapsed > 3000) return
+    if (!e.isTrusted || elapsed > 3000) return
+    if (elapsed < 80 && pressTime.current !== 0) return
     setOpen(true)
   }
 
@@ -42,6 +42,7 @@ export function CallToAction() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onMouseDown={handleMouseDown}
+              onTouchStart={handleTouchStart}
               onClick={handleClick}
               className="inline-flex items-center justify-center gap-3 bg-primary-foreground text-foreground px-8 py-4 text-sm tracking-wide hover:bg-primary-foreground/90 transition-colors duration-300 group"
             >
