@@ -69,7 +69,7 @@ export function Footer() {
                 <span className="text-muted-foreground">Шоурум: ул. Ленина, 1</span>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
+                <a href="https://vk.com/mebel.kuhni.skaf.novokuzneck" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
                   ВКонтакте
                 </a>
               </li>
