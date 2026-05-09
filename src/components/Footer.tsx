@@ -75,7 +75,7 @@ export function Footer() {
         <div className="pt-8 border-t border-border flex flex-col md:flex-row md:items-center justify-between gap-4 text-sm text-muted-foreground">
           <p>© 2025 FORMA. Меблировка квартир под ключ, Новосибирск.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-foreground transition-colors">
+            <a href="/privacy" className="hover:text-foreground transition-colors">
               Политика конфиденциальности
             </a>
           </div>
