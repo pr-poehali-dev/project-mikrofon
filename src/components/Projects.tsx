@@ -48,7 +48,7 @@ const projects = [
   },
   {
     id: 5,
-    title: "ЖК FF3",
+    title: "ЖК Flora & Fauna",
     category: "Полная меблировка",
     area: "87 м²",
     style: "Тёплый минимализм",
