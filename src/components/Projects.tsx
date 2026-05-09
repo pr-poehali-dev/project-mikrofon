@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react"
 import { ArrowUpRight, X, ChevronLeft, ChevronRight } from "lucide-react"
+import { useSiteContent } from "@/hooks/useSiteContent"
 
-const projects = [
+const fallbackProjects = [
   {
     id: 1,
     title: "ЖК Flora & Fauna",
@@ -11,7 +12,7 @@ const projects = [
     price: "от 1 200 000 ₽",
     duration: "45 дней",
     image: "https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/files/d69e0f91-34a7-406a-9237-6fcd5f4eff14.jpg",
-    gallery: [],
+    gallery: [] as string[],
   },
   {
     id: 2,
@@ -44,12 +45,13 @@ const projects = [
     price: "от 890 000 ₽",
     duration: "35 дней",
     image: "https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/files/7f5e34e0-5f57-4573-8603-4e5608f65a42.jpg",
-    gallery: [],
+    gallery: [] as string[],
   },
-
 ]
 
 export function Projects() {
+  const { projects: dbProjects } = useSiteContent()
+  const projects = dbProjects.length > 0 ? dbProjects : fallbackProjects
   const [hoveredId, setHoveredId] = useState<number | null>(null)
   const [revealedImages, setRevealedImages] = useState<Set<number>>(new Set())
   const imageRefs = useRef<(HTMLDivElement | null)[]>([])

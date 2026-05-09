@@ -1,0 +1,454 @@
+import { useState, useEffect, useRef } from 'react'
+import {
+  apiLogin, apiCheckToken, apiChangePassword, TOKEN_KEY,
+  apiGetContent, apiSaveContent,
+  apiGetProjects, apiSaveProject, apiDeleteProject,
+  apiGetReviews, apiSaveReview, apiDeleteReview,
+  apiUploadImage,
+} from '@/lib/api'
+
+type Tab = 'content' | 'projects' | 'reviews' | 'settings'
+
+interface Project {
+  id: number; title: string; category: string; area: string
+  style: string; price: string; duration: string; image: string; gallery: string[]; sort_order: number
+}
+interface Review {
+  id: number; author: string; location: string; text: string; rating: number; sort_order: number
+}
+
+export default function Admin() {
+  const [token, setToken] = useState(localStorage.getItem(TOKEN_KEY) || '')
+  const [authChecked, setAuthChecked] = useState(false)
+  const [loginForm, setLoginForm] = useState({ username: 'admin', password: '' })
+  const [loginError, setLoginError] = useState('')
+  const [tab, setTab] = useState<Tab>('content')
+  const [saving, setSaving] = useState(false)
+  const [savedMsg, setSavedMsg] = useState('')
+
+  // Content
+  const [content, setContent] = useState<Record<string, Record<string, string>>>({})
+
+  // Projects
+  const [projects, setProjects] = useState<Project[]>([])
+  const [editProject, setEditProject] = useState<Partial<Project> | null>(null)
+  const [newGalleryUrl, setNewGalleryUrl] = useState('')
+
+  // Reviews
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [editReview, setEditReview] = useState<Partial<Review> | null>(null)
+
+  // Settings
+  const [newPassword, setNewPassword] = useState('')
+  const [newPassword2, setNewPassword2] = useState('')
+
+  useEffect(() => {
+    if (token) {
+      apiCheckToken(token).then(r => {
+        if (r.valid) { setAuthChecked(true); loadAll() }
+        else { localStorage.removeItem(TOKEN_KEY); setToken(''); setAuthChecked(true) }
+      })
+    } else { setAuthChecked(true) }
+  }, [])
+
+  async function loadAll() {
+    const [c, p, r] = await Promise.all([apiGetContent(), apiGetProjects(), apiGetReviews()])
+    setContent(c)
+    setProjects(p)
+    setReviews(r)
+  }
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setLoginError('')
+    const res = await apiLogin(loginForm.username, loginForm.password)
+    if (res.token) {
+      localStorage.setItem(TOKEN_KEY, res.token)
+      setToken(res.token)
+      await loadAll()
+    } else {
+      setLoginError(res.error || 'Ошибка входа')
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem(TOKEN_KEY)
+    setToken('')
+  }
+
+  function showSaved() {
+    setSavedMsg('Сохранено!')
+    setTimeout(() => setSavedMsg(''), 2500)
+  }
+
+  async function saveContent() {
+    setSaving(true)
+    await apiSaveContent(content)
+    setSaving(false)
+    showSaved()
+  }
+
+  function setContentField(section: string, key: string, value: string) {
+    setContent(prev => ({ ...prev, [section]: { ...(prev[section] || {}), [key]: value } }))
+  }
+
+  async function handleSaveProject() {
+    if (!editProject) return
+    setSaving(true)
+    await apiSaveProject(editProject.id || null, editProject)
+    const updated = await apiGetProjects()
+    setProjects(updated)
+    setEditProject(null)
+    setSaving(false)
+    showSaved()
+  }
+
+  async function handleDeleteProject(id: number) {
+    if (!confirm('Удалить проект?')) return
+    await apiDeleteProject(id)
+    setProjects(p => p.filter(x => x.id !== id))
+  }
+
+  async function handleSaveReview() {
+    if (!editReview) return
+    setSaving(true)
+    await apiSaveReview(editReview.id || null, editReview)
+    const updated = await apiGetReviews()
+    setReviews(updated)
+    setEditReview(null)
+    setSaving(false)
+    showSaved()
+  }
+
+  async function handleDeleteReview(id: number) {
+    if (!confirm('Удалить отзыв?')) return
+    await apiDeleteReview(id)
+    setReviews(r => r.filter(x => x.id !== id))
+  }
+
+  async function handleChangePassword(e: React.FormEvent) {
+    e.preventDefault()
+    if (newPassword !== newPassword2) { alert('Пароли не совпадают'); return }
+    if (newPassword.length < 6) { alert('Минимум 6 символов'); return }
+    await apiChangePassword(newPassword)
+    setNewPassword(''); setNewPassword2('')
+    showSaved()
+  }
+
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [uploadTarget, setUploadTarget] = useState<'project_main' | 'project_gallery' | null>(null)
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file || !uploadTarget) return
+    setSaving(true)
+    try {
+      const url = await apiUploadImage(file)
+      if (uploadTarget === 'project_main') {
+        setEditProject(prev => prev ? { ...prev, image: url } : prev)
+      } else if (uploadTarget === 'project_gallery') {
+        setEditProject(prev => prev ? { ...prev, gallery: [...(prev.gallery || []), url] } : prev)
+      }
+    } catch { alert('Ошибка загрузки фото') }
+    setSaving(false)
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  if (!authChecked) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Загрузка...</div>
+
+  if (!token) return (
+    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+        <h1 className="text-2xl font-medium mb-8 text-center">Вход в админку</h1>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label className="block text-sm text-muted-foreground mb-1">Логин</label>
+            <input className="w-full border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background"
+              value={loginForm.username} onChange={e => setLoginForm(f => ({ ...f, username: e.target.value }))} />
+          </div>
+          <div>
+            <label className="block text-sm text-muted-foreground mb-1">Пароль</label>
+            <input type="password" className="w-full border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background"
+              value={loginForm.password} onChange={e => setLoginForm(f => ({ ...f, password: e.target.value }))} />
+          </div>
+          {loginError && <p className="text-red-500 text-sm">{loginError}</p>}
+          <button type="submit" className="w-full bg-foreground text-background py-2.5 text-sm hover:opacity-90 transition-opacity">Войти</button>
+        </form>
+        <p className="text-xs text-muted-foreground text-center mt-6">Стандартный пароль: <span className="font-mono">admin</span></p>
+      </div>
+    </div>
+  )
+
+  const tabs: { id: Tab; label: string }[] = [
+    { id: 'content', label: 'Тексты' },
+    { id: 'projects', label: 'Проекты' },
+    { id: 'reviews', label: 'Отзывы' },
+    { id: 'settings', label: 'Настройки' },
+  ]
+
+  return (
+    <div className="min-h-screen bg-background">
+      <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
+
+      {/* Header */}
+      <header className="border-b border-border px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-6">
+          <a href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">← Сайт</a>
+          <span className="text-lg font-medium">Админ-панель</span>
+        </div>
+        <div className="flex items-center gap-4">
+          {savedMsg && <span className="text-sm text-green-600">{savedMsg}</span>}
+          <button onClick={logout} className="text-sm text-muted-foreground hover:text-foreground transition-colors">Выйти</button>
+        </div>
+      </header>
+
+      <div className="flex">
+        {/* Sidebar */}
+        <aside className="w-48 border-r border-border min-h-[calc(100vh-57px)] py-6 px-4 flex-shrink-0">
+          <nav className="space-y-1">
+            {tabs.map(t => (
+              <button key={t.id} onClick={() => setTab(t.id)}
+                className={`w-full text-left px-3 py-2 text-sm transition-colors ${tab === t.id ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground hover:bg-secondary'}`}>
+                {t.label}
+              </button>
+            ))}
+          </nav>
+        </aside>
+
+        {/* Main */}
+        <main className="flex-1 p-8 max-w-4xl">
+
+          {/* ТЕКСТЫ */}
+          {tab === 'content' && (
+            <div className="space-y-8">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-medium">Тексты сайта</h2>
+                <button onClick={saveContent} disabled={saving}
+                  className="bg-foreground text-background px-6 py-2 text-sm hover:opacity-90 disabled:opacity-50 transition-opacity">
+                  {saving ? 'Сохранение...' : 'Сохранить'}
+                </button>
+              </div>
+
+              {[
+                { section: 'hero', label: 'Главный экран', fields: [
+                  { key: 'title', label: 'Заголовок', multiline: false },
+                  { key: 'subtitle', label: 'Подзаголовок', multiline: true },
+                  { key: 'cta_primary', label: 'Кнопка 1', multiline: false },
+                  { key: 'cta_secondary', label: 'Кнопка 2', multiline: false },
+                ]},
+                { section: 'contacts', label: 'Контакты', fields: [
+                  { key: 'phone', label: 'Телефон (отображение)', multiline: false },
+                  { key: 'phone_href', label: 'Телефон (ссылка tel:)', multiline: false },
+                  { key: 'whatsapp_href', label: 'Ссылка WhatsApp/MAX', multiline: false },
+                  { key: 'telegram', label: 'Telegram', multiline: false },
+                  { key: 'vk_href', label: 'Ссылка ВКонтакте', multiline: false },
+                ]},
+                { section: 'footer', label: 'Футер', fields: [
+                  { key: 'company_name', label: 'Название компании', multiline: false },
+                  { key: 'description', label: 'Описание', multiline: true },
+                  { key: 'copyright', label: 'Копирайт', multiline: false },
+                ]},
+              ].map(({ section, label, fields }) => (
+                <div key={section} className="border border-border p-6">
+                  <h3 className="font-medium mb-4 text-muted-foreground text-sm uppercase tracking-wider">{label}</h3>
+                  <div className="space-y-4">
+                    {fields.map(({ key, label: fl, multiline }) => (
+                      <div key={key}>
+                        <label className="block text-sm text-muted-foreground mb-1">{fl}</label>
+                        {multiline ? (
+                          <textarea rows={3} className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background resize-none"
+                            value={content[section]?.[key] || ''}
+                            onChange={e => setContentField(section, key, e.target.value)} />
+                        ) : (
+                          <input className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background"
+                            value={content[section]?.[key] || ''}
+                            onChange={e => setContentField(section, key, e.target.value)} />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* ПРОЕКТЫ */}
+          {tab === 'projects' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-medium">Проекты</h2>
+                <button onClick={() => setEditProject({ title: '', category: '', area: '', style: '', price: '', duration: '', image: '', gallery: [], sort_order: projects.length + 1 })}
+                  className="bg-foreground text-background px-5 py-2 text-sm hover:opacity-90 transition-opacity">+ Добавить</button>
+              </div>
+
+              {editProject && (
+                <div className="border border-border p-6 space-y-4 bg-secondary/30">
+                  <h3 className="font-medium">{editProject.id ? 'Редактировать проект' : 'Новый проект'}</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    {[
+                      { key: 'title', label: 'Название' }, { key: 'category', label: 'Категория' },
+                      { key: 'area', label: 'Площадь' }, { key: 'style', label: 'Стиль' },
+                      { key: 'price', label: 'Цена' }, { key: 'duration', label: 'Срок' },
+                    ].map(({ key, label }) => (
+                      <div key={key}>
+                        <label className="block text-sm text-muted-foreground mb-1">{label}</label>
+                        <input className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background"
+                          value={(editProject as Record<string, unknown>)[key] as string || ''}
+                          onChange={e => setEditProject(p => p ? { ...p, [key]: e.target.value } : p)} />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm text-muted-foreground mb-2">Главное фото</label>
+                    <div className="flex gap-3 items-start">
+                      {editProject.image && <img src={editProject.image} className="w-24 h-16 object-cover border border-border" />}
+                      <div className="flex flex-col gap-2">
+                        <button onClick={() => { setUploadTarget('project_main'); fileInputRef.current?.click() }}
+                          className="border border-border px-4 py-1.5 text-sm hover:bg-secondary transition-colors">Загрузить фото</button>
+                        <input placeholder="или вставить URL" className="border border-border px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background w-80"
+                          value={editProject.image || ''}
+                          onChange={e => setEditProject(p => p ? { ...p, image: e.target.value } : p)} />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm text-muted-foreground mb-2">Галерея (дополнительные фото)</label>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {(editProject.gallery || []).map((url, i) => (
+                        <div key={i} className="relative">
+                          <img src={url} className="w-20 h-14 object-cover border border-border" />
+                          <button onClick={() => setEditProject(p => p ? { ...p, gallery: (p.gallery || []).filter((_, j) => j !== i) } : p)}
+                            className="absolute -top-1 -right-1 bg-foreground text-background w-5 h-5 text-xs flex items-center justify-center hover:opacity-80">×</button>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      <button onClick={() => { setUploadTarget('project_gallery'); fileInputRef.current?.click() }}
+                        className="border border-border px-4 py-1.5 text-sm hover:bg-secondary transition-colors">+ Загрузить</button>
+                      <input placeholder="или вставить URL" className="border border-border px-3 py-1.5 text-sm focus:outline-none bg-background w-80"
+                        value={newGalleryUrl} onChange={e => setNewGalleryUrl(e.target.value)} />
+                      <button onClick={() => { if (newGalleryUrl) { setEditProject(p => p ? { ...p, gallery: [...(p.gallery || []), newGalleryUrl] } : p); setNewGalleryUrl('') } }}
+                        className="border border-border px-3 py-1.5 text-sm hover:bg-secondary">+</button>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3 pt-2">
+                    <button onClick={handleSaveProject} disabled={saving}
+                      className="bg-foreground text-background px-6 py-2 text-sm hover:opacity-90 disabled:opacity-50 transition-opacity">
+                      {saving ? 'Сохранение...' : 'Сохранить'}
+                    </button>
+                    <button onClick={() => setEditProject(null)} className="border border-border px-6 py-2 text-sm hover:bg-secondary transition-colors">Отмена</button>
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-3">
+                {projects.map(p => (
+                  <div key={p.id} className="border border-border p-4 flex items-center gap-4">
+                    {p.image && <img src={p.image} className="w-20 h-14 object-cover flex-shrink-0" />}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm">{p.title}</p>
+                      <p className="text-xs text-muted-foreground">{p.category} · {p.area} · {p.price}</p>
+                    </div>
+                    <div className="flex gap-2 flex-shrink-0">
+                      <button onClick={() => setEditProject({ ...p })} className="border border-border px-4 py-1.5 text-sm hover:bg-secondary transition-colors">Изменить</button>
+                      <button onClick={() => handleDeleteProject(p.id)} className="border border-red-200 text-red-500 px-4 py-1.5 text-sm hover:bg-red-50 transition-colors">Удалить</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ОТЗЫВЫ */}
+          {tab === 'reviews' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-medium">Отзывы</h2>
+                <button onClick={() => setEditReview({ author: '', location: '', text: '', rating: 5, sort_order: reviews.length + 1 })}
+                  className="bg-foreground text-background px-5 py-2 text-sm hover:opacity-90 transition-opacity">+ Добавить</button>
+              </div>
+
+              {editReview && (
+                <div className="border border-border p-6 space-y-4 bg-secondary/30">
+                  <h3 className="font-medium">{editReview.id ? 'Редактировать отзыв' : 'Новый отзыв'}</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm text-muted-foreground mb-1">Имя</label>
+                      <input className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background"
+                        value={editReview.author || ''}
+                        onChange={e => setEditReview(r => r ? { ...r, author: e.target.value } : r)} />
+                    </div>
+                    <div>
+                      <label className="block text-sm text-muted-foreground mb-1">ЖК / Откуда</label>
+                      <input className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background"
+                        value={editReview.location || ''}
+                        onChange={e => setEditReview(r => r ? { ...r, location: e.target.value } : r)} />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm text-muted-foreground mb-1">Текст отзыва</label>
+                    <textarea rows={4} className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background resize-none"
+                      value={editReview.text || ''}
+                      onChange={e => setEditReview(r => r ? { ...r, text: e.target.value } : r)} />
+                  </div>
+                  <div className="flex gap-3 pt-2">
+                    <button onClick={handleSaveReview} disabled={saving}
+                      className="bg-foreground text-background px-6 py-2 text-sm hover:opacity-90 disabled:opacity-50 transition-opacity">
+                      {saving ? 'Сохранение...' : 'Сохранить'}
+                    </button>
+                    <button onClick={() => setEditReview(null)} className="border border-border px-6 py-2 text-sm hover:bg-secondary transition-colors">Отмена</button>
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-3">
+                {reviews.map(r => (
+                  <div key={r.id} className="border border-border p-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <p className="font-medium text-sm">{r.author} <span className="text-muted-foreground font-normal">— {r.location}</span></p>
+                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{r.text}</p>
+                      </div>
+                      <div className="flex gap-2 flex-shrink-0">
+                        <button onClick={() => setEditReview({ ...r })} className="border border-border px-4 py-1.5 text-sm hover:bg-secondary transition-colors">Изменить</button>
+                        <button onClick={() => handleDeleteReview(r.id)} className="border border-red-200 text-red-500 px-4 py-1.5 text-sm hover:bg-red-50 transition-colors">Удалить</button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* НАСТРОЙКИ */}
+          {tab === 'settings' && (
+            <div className="space-y-8 max-w-md">
+              <h2 className="text-xl font-medium">Настройки</h2>
+              <div className="border border-border p-6">
+                <h3 className="font-medium mb-4">Изменить пароль</h3>
+                <form onSubmit={handleChangePassword} className="space-y-4">
+                  <div>
+                    <label className="block text-sm text-muted-foreground mb-1">Новый пароль</label>
+                    <input type="password" className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background"
+                      value={newPassword} onChange={e => setNewPassword(e.target.value)} />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-muted-foreground mb-1">Повторите пароль</label>
+                    <input type="password" className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background"
+                      value={newPassword2} onChange={e => setNewPassword2(e.target.value)} />
+                  </div>
+                  <button type="submit" className="bg-foreground text-background px-6 py-2 text-sm hover:opacity-90 transition-opacity">Сохранить пароль</button>
+                  {savedMsg && <p className="text-green-600 text-sm">{savedMsg}</p>}
+                </form>
+              </div>
+            </div>
+          )}
+
+        </main>
+      </div>
+    </div>
+  )
+}
