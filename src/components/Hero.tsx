@@ -58,7 +58,7 @@ export function Hero() {
             onMouseDown={recordPress(pressTime)}
             onTouchStart={recordPress(pressTime)}
             onClick={handleMaxClick}
-            className="inline-flex items-center justify-center gap-2 border border-white/40 text-white px-8 text-sm tracking-widest uppercase font-light hover:bg-white/10 transition-colors duration-300 py-2.5"
+            className="inline-flex items-center justify-center gap-2 border border-white/40 text-white px-8 tracking-widest uppercase font-light hover:bg-white/10 transition-colors duration-300 py-2.5 text-sm rounded-full"
           >
             Получить концепцию в MAX
           </a>
