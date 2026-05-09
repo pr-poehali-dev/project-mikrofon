@@ -39,7 +39,7 @@ export function Hero() {
       <div className="container mx-auto px-6 md:px-12 relative z-10 text-center max-w-5xl my-0 py-[66px]">
         <p className="tracking-[0.35em] uppercase text-white/60 my-0 py-5 text-xs text-center font-light">Новосибирск</p>
 
-        <h1 className="sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.05] tracking-tight mb-8 text-balance px-0 mx-0 text-left text-3xl font-light">Меблировка квартир под ключ Новосибирск</h1>
+        <h1 className="sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.05] tracking-tight mb-8 text-balance px-0 mx-0 text-left text-3xl font-light">Меблировка квартир под ключ в Новосибирске</h1>
 
         <p className="text-white/70 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto font-light py-[3px] my-9">Делаем меблировки по готовым дизайн проектам. Проектируем, изготавливаем и монтируем — от эконома до премиума.</p>
 
