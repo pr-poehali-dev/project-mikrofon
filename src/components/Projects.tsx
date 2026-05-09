@@ -46,23 +46,7 @@ const projects = [
     image: "https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/files/7f5e34e0-5f57-4573-8603-4e5608f65a42.jpg",
     gallery: [],
   },
-  {
-    id: 5,
-    title: "ЖК Flora & Fauna",
-    category: "Полная меблировка",
-    area: "87 м²",
-    style: "Тёплый минимализм",
-    price: "от 2 100 000 ₽",
-    duration: "55 дней",
-    image: "https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/bucket/4f8bc7c5-e90e-4f82-84ca-caef21be9d51.jpg",
-    gallery: [
-      "https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/bucket/4f8bc7c5-e90e-4f82-84ca-caef21be9d51.jpg",
-      "https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/bucket/bbbaeb4a-3354-4edc-911f-4c457ac933e8.jpg",
-      "https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/bucket/4c635d36-b87c-471e-af39-d525e57f15ed.jpg",
-      "https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/bucket/656d11a4-3a25-45f5-9ef9-e401668d2f1f.jpg",
-      "https://cdn.poehali.dev/projects/4b174f8a-7b40-422d-92f3-3d0d5ddcf97f/bucket/a9beae1f-a252-46f8-8b21-8d98f4ca0793.jpg",
-    ],
-  },
+
 ]
 
 export function Projects() {
