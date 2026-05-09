@@ -6,24 +6,22 @@ export function Hero() {
   const pressTime = useRef<number>(0)
   const calcPressTime = useRef<number>(0)
 
-  const handleMaxMouseDown = () => { pressTime.current = Date.now() }
-  const handleMaxTouchStart = () => { pressTime.current = Date.now() }
+  const recordPress = (ref: React.MutableRefObject<number>) => () => {
+    ref.current = Date.now()
+  }
 
   const handleMaxClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
     const elapsed = Date.now() - pressTime.current
-    if (!e.isTrusted || elapsed > 3000) return
-    if (elapsed < 80 && pressTime.current !== 0) return
+    if (pressTime.current === 0 || elapsed > 5000) return
+    pressTime.current = 0
     window.open("https://max.ru/id421714233013_bot", "_blank", "noopener,noreferrer")
   }
 
-  const handleCalcMouseDown = () => { calcPressTime.current = Date.now() }
-  const handleCalcTouchStart = () => { calcPressTime.current = Date.now() }
-
-  const handleCalcClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCalcClick = () => {
     const elapsed = Date.now() - calcPressTime.current
-    if (!e.isTrusted || elapsed > 3000) return
-    if (elapsed < 80 && calcPressTime.current !== 0) return
+    if (calcPressTime.current === 0 || elapsed > 5000) return
+    calcPressTime.current = 0
     setOpen(true)
   }
 
@@ -49,8 +47,8 @@ export function Hero() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
           <button
-            onMouseDown={handleCalcMouseDown}
-            onTouchStart={handleCalcTouchStart}
+            onMouseDown={recordPress(calcPressTime)}
+            onTouchStart={recordPress(calcPressTime)}
             onClick={handleCalcClick}
             className="inline-flex items-center justify-center gap-2 bg-white text-foreground px-8 text-sm tracking-widest uppercase font-medium hover:bg-stone-100 transition-colors duration-300 my-0 py-5"
           >
@@ -59,8 +57,8 @@ export function Hero() {
 
           <a
             href="https://max.ru/id421714233013_bot"
-            onMouseDown={handleMaxMouseDown}
-            onTouchStart={handleMaxTouchStart}
+            onMouseDown={recordPress(pressTime)}
+            onTouchStart={recordPress(pressTime)}
             onClick={handleMaxClick}
             className="inline-flex items-center justify-center gap-2 border border-white/40 text-white px-8 text-sm tracking-widest uppercase font-light hover:bg-white/10 transition-colors duration-300 py-2.5"
           >
