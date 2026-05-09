@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { HighlightedText } from "./HighlightedText"
 import Icon from "@/components/ui/icon"
+import { useSiteContent } from "@/hooks/useSiteContent"
 
 const expertiseAreas = [
   {
@@ -41,6 +42,12 @@ const expertiseAreas = [
 ]
 
 export function Expertise() {
+  const { get } = useSiteContent()
+  const areas = expertiseAreas.map((a, i) => ({
+    ...a,
+    title: get('expertise', `item_${i+1}_title`) || a.title,
+    description: get('expertise', `item_${i+1}_desc`) || a.description,
+  }))
   const [visibleItems, setVisibleItems] = useState<number[]>([])
   const sectionRef = useRef<HTMLElement>(null)
   const itemRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -69,19 +76,19 @@ export function Expertise() {
     <section id="services" ref={sectionRef} className="py-32 md:py-29">
       <div className="container mx-auto px-6 md:px-12">
         <div className="max-w-3xl mb-20">
-          <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6">Что мы делаем</p>
+          <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6">{get('expertise','badge','Что мы делаем')}</p>
           <h2 className="text-6xl font-medium leading-[1.15] tracking-tight mb-6 text-balance lg:text-8xl">
-            <HighlightedText>Услуги</HighlightedText> под
+            <HighlightedText>{get('expertise','title_highlight','Услуги')}</HighlightedText> {get('expertise','title','под')}
             <br />
             ключ
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed">
-            Один подрядчик — вся квартира. Не нужно искать отдельно кухню, шкафы и диван. Мы делаем всё сами, от дизайна до монтажа.
+            {get('expertise','subtitle','Один подрядчик — вся квартира. Не нужно искать отдельно кухню, шкафы и диван. Мы делаем всё сами, от дизайна до монтажа.')}
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-x-12 gap-y-16">
-          {expertiseAreas.map((area, index) => (
+          {areas.map((area, index) => (
             <div
               key={area.title}
               ref={(el) => {

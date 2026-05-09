@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { HighlightedText } from "./HighlightedText"
 import Icon from "@/components/ui/icon"
+import { useSiteContent } from "@/hooks/useSiteContent"
 
 const advantages = [
   {
@@ -36,6 +37,12 @@ const advantages = [
 ]
 
 export function WhyUs() {
+  const { get } = useSiteContent()
+  const items = advantages.map((a, i) => ({
+    ...a,
+    title: get('whyus', `item_${i+1}_title`) || a.title,
+    description: get('whyus', `item_${i+1}_desc`) || a.description,
+  }))
   const [visibleItems, setVisibleItems] = useState<number[]>([])
   const sectionRef = useRef<HTMLElement>(null)
   const itemRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -64,16 +71,14 @@ export function WhyUs() {
     <section id="why" ref={sectionRef} className="py-32 bg-foreground text-primary-foreground">
       <div className="container mx-auto px-6 md:px-12">
         <div className="max-w-2xl mb-16">
-          <p className="text-white/50 text-sm tracking-[0.3em] uppercase mb-6">Наши преимущества</p>
+          <p className="text-white/50 text-sm tracking-[0.3em] uppercase mb-6">{get('whyus','badge','Наши преимущества')}</p>
           <h2 className="text-5xl md:text-6xl font-medium leading-[1.1] tracking-tight lg:text-7xl">
-            Почему выбирают
-            <br />
-            <HighlightedText>нас</HighlightedText>
+            {get('whyus','title','Почему выбирают нас')}
           </h2>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12">
-          {advantages.map((item, index) => (
+          {items.map((item, index) => (
             <div
               key={item.title}
               ref={(el) => { itemRefs.current[index] = el }}

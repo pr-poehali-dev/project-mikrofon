@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { useSiteContent } from "@/hooks/useSiteContent"
 
 const steps = [
   {
@@ -39,6 +40,12 @@ const steps = [
 ]
 
 export function Process() {
+  const { get } = useSiteContent()
+  const dynSteps = steps.map((s, i) => ({
+    ...s,
+    title: get('process', `step_${i+1}_title`) || s.title,
+    description: get('process', `step_${i+1}_desc`) || s.description,
+  }))
   const [visibleItems, setVisibleItems] = useState<number[]>([])
   const itemRefs = useRef<(HTMLDivElement | null)[]>([])
 
@@ -67,13 +74,9 @@ export function Process() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
           <div className="lg:sticky lg:top-32 lg:self-start">
-            <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6">Как мы работаем</p>
+            <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6">{get('process','badge','Как мы работаем')}</p>
             <h2 className="text-5xl md:text-6xl font-medium leading-[1.1] tracking-tight mb-6 lg:text-7xl">
-              7 шагов
-              <br />
-              до готовой
-              <br />
-              квартиры
+              {get('process','title','7 шагов до готовой квартиры')}
             </h2>
             <p className="text-muted-foreground text-lg leading-relaxed">
               Прозрачный процесс, чёткие сроки и один ответственный за всё. Вы не теряете время — мы делаем работу.
@@ -81,14 +84,14 @@ export function Process() {
           </div>
 
           <div className="space-y-0">
-            {steps.map((step, index) => (
+            {dynSteps.map((step, index) => (
               <div
                 key={step.number}
                 ref={(el) => { itemRefs.current[index] = el }}
                 data-index={index}
                 className={`relative flex gap-8 pb-10 transition-all duration-700 ${
                   visibleItems.includes(index) ? "opacity-100 translate-x-0" : "opacity-0 translate-x-6"
-                } ${index < steps.length - 1 ? "border-l border-border ml-5" : "ml-5"}`}
+                } ${index < dynSteps.length - 1 ? "border-l border-border ml-5" : "ml-5"}`}
                 style={{ transitionDelay: `${index * 80}ms` }}
               >
                 <div className="absolute -left-5 top-0 w-10 h-10 bg-background border border-border flex items-center justify-center flex-shrink-0">
