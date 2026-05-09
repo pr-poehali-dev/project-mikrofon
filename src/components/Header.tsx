@@ -120,9 +120,7 @@ export function Header() {
             href="#contact"
             className="inline-flex items-center justify-center gap-2 text-sm px-5 py-2.5 bg-white text-foreground border border-foreground/20 hover:bg-foreground hover:text-white transition-all duration-300 mb-4"
             onClick={closeMobileMenu}
-          >
-            Консультация
-          </a>
+          >Позвонить</a>
         </div>
       </div>
     </header>
