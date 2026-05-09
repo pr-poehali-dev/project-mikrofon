@@ -54,9 +54,7 @@ export function Footer() {
                 <a href="tel:+73831234567" className="hover:text-foreground transition-colors">+7 (913) 431-05-55</a>
               </li>
               <li>
-                <a href="https://max.ru/u/f9LHodD0cOL1PbwV-gcwhH0uDPPh7fYs6mEO6mT9skVfTgi3h9x92puP1aU" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
-                  WhatsApp
-                </a>
+                <a href="https://max.ru/u/f9LHodD0cOL1PbwV-gcwhH0uDPPh7fYs6mEO6mT9skVfTgi3h9x92puP1aU" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">MAX</a>
               </li>
               <li>
                 <a href="https://t.me/forma_nsk" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
@@ -73,7 +71,7 @@ export function Footer() {
         </div>
 
         <div className="pt-8 border-t border-border flex flex-col md:flex-row md:items-center justify-between gap-4 text-sm text-muted-foreground">
-          <p>© 2025 FORMA. Меблировка квартир под ключ, Новосибирск.</p>
+          <p>MSM - NSK: Меблировка квартир под ключ, Новосибирск.</p>
           <div className="flex gap-6">
             <a href="/privacy" className="hover:text-foreground transition-colors">
               Политика конфиденциальности
