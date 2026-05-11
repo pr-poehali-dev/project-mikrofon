@@ -27,7 +27,8 @@ def check_auth(event):
         return False
     conn = get_db()
     cur = conn.cursor()
-    cur.execute(f"SELECT value FROM {t('site_content')} WHERE section = '_sessions' AND key = %s", (token,))
+    safe_token = token.replace("'", "''")
+    cur.execute(f"SELECT value FROM {t('site_content')} WHERE section = '_sessions' AND key = '{safe_token}'")
     row = cur.fetchone()
     conn.close()
     return bool(row)
