@@ -15,7 +15,7 @@ def send_email(name: str, phone: str, contact_method: str):
     msg = MIMEMultipart('alternative')
     msg['Subject'] = f'Новая заявка с сайта: {name}'
     msg['From'] = gmail
-    msg['To'] = gmail
+    msg['To'] = 'msm.nk42@yandex.ru'
     html = f"""
     <div style="font-family:Arial,sans-serif;max-width:500px;padding:24px;border:1px solid #e5e5e5">
       <h2 style="margin:0 0 16px;font-size:20px">Новая заявка с сайта</h2>
@@ -27,7 +27,7 @@ def send_email(name: str, phone: str, contact_method: str):
     msg.attach(MIMEText(html, 'html'))
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
         server.login(gmail, password)
-        server.sendmail(gmail, gmail, msg.as_string())
+        server.sendmail(gmail, 'msm.nk42@yandex.ru', msg.as_string())
 
 
 def send_telegram(text: str):
@@ -45,7 +45,7 @@ def send_telegram(text: str):
 
 
 def handler(event: dict, context) -> dict:
-    """Сохранение заявок и отправка email-уведомлений на sayapingood1985@gmail.com."""
+    """Сохранение заявок и отправка email-уведомлений на msm.nk42@yandex.ru."""
     cors = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',

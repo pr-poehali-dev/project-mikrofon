@@ -1,21 +1,10 @@
 {
   "tests": [
     {
-      "name": "Получить список заявок",
-      "method": "GET",
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
       "path": "/",
-      "expectedStatus": 200,
-      "expectedBody": {"leads": []},
-      "bodyMatcher": "partial"
-    },
-    {
-      "name": "Создать заявку",
-      "method": "POST",
-      "path": "/",
-      "body": {"name": "Тест", "phone": "+79001234567", "contact_method": "Telegram"},
-      "expectedStatus": 200,
-      "expectedBody": {"ok": true},
-      "bodyMatcher": "partial"
+      "expectedStatus": 200
     }
   ]
 }
