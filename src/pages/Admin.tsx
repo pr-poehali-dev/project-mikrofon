@@ -40,16 +40,18 @@ export default function Admin() {
       apiCheckToken(token).then(r => {
         if (r.valid) { setAuthChecked(true); loadAll() }
         else { localStorage.removeItem(TOKEN_KEY); setToken(''); setAuthChecked(true) }
-      })
+      }).catch(() => { setAuthChecked(true) })
     } else { setAuthChecked(true) }
   }, [])
 
   async function loadAll() {
-    const [c, p, r, l] = await Promise.all([apiGetContent(), apiGetProjects(), apiGetReviews(), apiGetLeads()])
-    setContent(c)
-    setProjects(p)
-    setReviews(r)
-    setLeads(l.leads || [])
+    try {
+      const [c, p, r, l] = await Promise.all([apiGetContent(), apiGetProjects(), apiGetReviews(), apiGetLeads()])
+      setContent(c || {})
+      setProjects(Array.isArray(p) ? p : [])
+      setReviews(Array.isArray(r) ? r : [])
+      setLeads(l?.leads || [])
+    } catch { /* данные недоступны, но в админку всё равно пускаем */ }
   }
 
   async function handleLogin(e: React.FormEvent) {
@@ -59,7 +61,7 @@ export default function Admin() {
     if (res.token) {
       localStorage.setItem(TOKEN_KEY, res.token)
       setToken(res.token)
-      await loadAll()
+      loadAll() // не await — не блокируем вход
     } else {
       setLoginError(res.error || 'Ошибка входа')
     }
