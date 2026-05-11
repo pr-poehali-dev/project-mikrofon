@@ -64,7 +64,10 @@ export async function apiDeleteReview(id: number) {
 }
 
 export async function apiSubmitLead(name: string, phone: string, contact_method: string) {
-  return post(LEADS_URL, { name, phone, contact_method })
+  return fetch(LEADS_URL, {
+    method: 'POST',
+    body: JSON.stringify({ name, phone, contact_method }),
+  }).then(r => r.json())
 }
 
 export async function apiGetLeads() {
