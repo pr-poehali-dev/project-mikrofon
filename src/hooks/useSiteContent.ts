@@ -25,21 +25,16 @@ export function useSiteContent() {
   const [loaded, setLoaded] = useState(!!contentCache)
 
   useEffect(() => {
-    if (contentCache && projectsCache && reviewsCache) { setLoaded(true); return }
+    if (contentCache && projectsCache && reviewsCache) return
     Promise.all([apiGetContent(), apiGetProjects(), apiGetReviews()]).then(([c, p, r]) => {
-      contentCache = c || {}
-      projectsCache = Array.isArray(p) ? p : []
-      reviewsCache = Array.isArray(r) ? r : []
-      setContent(contentCache)
-      setProjects(projectsCache)
-      setReviews(reviewsCache)
+      contentCache = c
+      projectsCache = p
+      reviewsCache = r
+      setContent(c)
+      setProjects(p)
+      setReviews(r)
       setLoaded(true)
-    }).catch(() => {
-      contentCache = {}
-      projectsCache = []
-      reviewsCache = []
-      setLoaded(true)
-    })
+    }).catch(() => setLoaded(true))
   }, [])
 
   const get = (section: string, key: string, fallback = '') =>
