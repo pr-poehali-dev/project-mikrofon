@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { X } from "lucide-react"
 
+const LEADS_URL = 'https://functions.poehali.dev/ed1179be-28aa-48f1-96e8-c89096907a25'
+
 interface LeadModalProps {
   open: boolean
   onClose: () => void
@@ -9,9 +11,19 @@ interface LeadModalProps {
 export function LeadModal({ open, onClose }: LeadModalProps) {
   const [form, setForm] = useState({ name: "", phone: "", comment: "" })
   const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
+    try {
+      await fetch(LEADS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: form.name, phone: form.phone, contact_method: form.comment }),
+      })
+    } catch (err) { console.error(err) }
+    setLoading(false)
     setSent(true)
   }
 
@@ -89,9 +101,10 @@ export function LeadModal({ open, onClose }: LeadModalProps) {
               </div>
               <button
                 type="submit"
-                className="w-full bg-foreground text-primary-foreground py-4 text-sm tracking-widest uppercase font-medium hover:bg-foreground/90 transition-colors duration-300 mt-2"
+                disabled={loading}
+                className="w-full bg-foreground text-primary-foreground py-4 text-sm tracking-widest uppercase font-medium hover:bg-foreground/90 transition-colors duration-300 mt-2 disabled:opacity-60"
               >
-                Отправить заявку
+                {loading ? 'Отправка...' : 'Отправить заявку'}
               </button>
               <p className="text-muted-foreground text-xs text-center">
                 Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности

@@ -1,7 +1,33 @@
 import json
 import os
+import smtplib
 import urllib.request
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import psycopg2
+
+
+def send_email(name: str, phone: str, contact_method: str):
+    password = os.environ.get('GMAIL_APP_PASSWORD', '')
+    if not password:
+        return
+    gmail = 'sayapingood1985@gmail.com'
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = f'Новая заявка с сайта: {name}'
+    msg['From'] = gmail
+    msg['To'] = gmail
+    html = f"""
+    <div style="font-family:Arial,sans-serif;max-width:500px;padding:24px;border:1px solid #e5e5e5">
+      <h2 style="margin:0 0 16px;font-size:20px">Новая заявка с сайта</h2>
+      <p style="margin:8px 0"><b>Имя:</b> {name}</p>
+      <p style="margin:8px 0"><b>Телефон:</b> {phone}</p>
+      <p style="margin:8px 0"><b>Способ связи:</b> {contact_method or 'не указано'}</p>
+    </div>
+    """
+    msg.attach(MIMEText(html, 'html'))
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+        server.login(gmail, password)
+        server.sendmail(gmail, gmail, msg.as_string())
 
 
 def send_telegram(text: str):
@@ -19,7 +45,7 @@ def send_telegram(text: str):
 
 
 def handler(event: dict, context) -> dict:
-    """Сохранение заявок с сайта, уведомление в Telegram и список заявок для админки."""
+    """Сохранение заявок, отправка email и Telegram-уведомления."""
     cors = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -63,12 +89,16 @@ def handler(event: dict, context) -> dict:
     cur.close()
     conn.close()
 
-    msg = (
+    try:
+        send_email(name, phone, contact_method)
+    except Exception:
+        pass
+
+    send_telegram(
         f"🔔 <b>Новая заявка с сайта!</b>\n\n"
         f"👤 Имя: {name}\n"
         f"📞 Телефон: {phone}\n"
         f"💬 Связь: {contact_method or 'не указано'}"
     )
-    send_telegram(msg)
 
     return {'statusCode': 200, 'headers': cors, 'body': json.dumps({'ok': True, 'id': lead_id})}
