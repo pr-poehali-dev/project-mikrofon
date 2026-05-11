@@ -45,7 +45,7 @@ def send_telegram(text: str):
 
 
 def handler(event: dict, context) -> dict:
-    """Сохранение заявок, отправка email и Telegram-уведомления."""
+    """Сохранение заявок и отправка email-уведомлений на sayapingood1985@gmail.com."""
     cors = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
