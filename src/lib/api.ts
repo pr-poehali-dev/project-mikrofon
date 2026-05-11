@@ -1,5 +1,6 @@
 const AUTH_URL = 'https://functions.poehali.dev/a5f8ea94-8c54-4dc6-acd1-c3ffa9daddea'
 const CONTENT_URL = 'https://functions.poehali.dev/c348273a-22f3-4739-919c-6dff12bba843'
+const LEADS_URL = 'https://functions.poehali.dev/ed1179be-28aa-48f1-96e8-c89096907a25'
 
 export const TOKEN_KEY = 'admin_token'
 
@@ -60,6 +61,14 @@ export async function apiSaveReview(id: number | null, data: Record<string, unkn
 
 export async function apiDeleteReview(id: number) {
   return post(CONTENT_URL, { action: 'delete-review', id }, getToken())
+}
+
+export async function apiSubmitLead(data: { name: string; phone: string; contact_method: string }) {
+  return post(LEADS_URL, data)
+}
+
+export async function apiGetLeads() {
+  return fetch(LEADS_URL, { headers: { 'X-Session-Id': getToken() } }).then(r => r.json())
 }
 
 export async function apiUploadImage(file: File): Promise<string> {

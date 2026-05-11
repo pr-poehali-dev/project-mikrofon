@@ -4,11 +4,11 @@ import {
   apiGetContent, apiSaveContent,
   apiGetProjects, apiSaveProject, apiDeleteProject,
   apiGetReviews, apiSaveReview, apiDeleteReview,
-  apiUploadImage,
+  apiUploadImage, apiGetLeads,
 } from '@/lib/api'
 import { invalidateContentCache } from '@/hooks/useSiteContent'
 
-type Tab = 'content' | 'buttons' | 'blocks' | 'projects' | 'reviews' | 'settings'
+type Tab = 'content' | 'buttons' | 'blocks' | 'projects' | 'reviews' | 'leads' | 'settings'
 
 interface Project {
   id: number; title: string; category: string; area: string
@@ -39,6 +39,9 @@ export default function Admin() {
   const [reviews, setReviews] = useState<Review[]>([])
   const [editReview, setEditReview] = useState<Partial<Review> | null>(null)
 
+  // Leads
+  const [leads, setLeads] = useState<{id: number; name: string; phone: string; contact_method: string; created_at: string}[]>([])
+
   // Settings
   const [newPassword, setNewPassword] = useState('')
   const [newPassword2, setNewPassword2] = useState('')
@@ -53,10 +56,11 @@ export default function Admin() {
   }, [])
 
   async function loadAll() {
-    const [c, p, r] = await Promise.all([apiGetContent(), apiGetProjects(), apiGetReviews()])
+    const [c, p, r, l] = await Promise.all([apiGetContent(), apiGetProjects(), apiGetReviews(), apiGetLeads()])
     setContent(c)
     setProjects(p)
     setReviews(r)
+    setLeads(l.leads || [])
   }
 
   async function handleLogin(e: React.FormEvent) {
@@ -198,6 +202,7 @@ export default function Admin() {
     { id: 'blocks', label: 'Блоки' },
     { id: 'projects', label: 'Проекты' },
     { id: 'reviews', label: 'Отзывы' },
+    { id: 'leads', label: `Заявки${leads.length ? ` (${leads.length})` : ''}` },
     { id: 'settings', label: 'Настройки' },
   ]
 
@@ -586,6 +591,33 @@ export default function Admin() {
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* ЗАЯВКИ */}
+          {tab === 'leads' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-medium">Заявки с сайта</h2>
+                <button onClick={loadAll} className="border border-border px-4 py-2 text-sm hover:bg-secondary transition-colors">Обновить</button>
+              </div>
+              {leads.length === 0 ? (
+                <p className="text-muted-foreground text-sm py-8 text-center">Заявок пока нет</p>
+              ) : (
+                <div className="space-y-3">
+                  {leads.map(lead => (
+                    <div key={lead.id} className="border border-border p-4 flex items-center gap-6">
+                      <div className="flex-1">
+                        <p className="font-medium text-sm">{lead.name}</p>
+                        <p className="text-sm text-muted-foreground">{lead.phone}{lead.contact_method ? ` · ${lead.contact_method}` : ''}</p>
+                      </div>
+                      <p className="text-xs text-muted-foreground flex-shrink-0">
+                        {new Date(lead.created_at).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
