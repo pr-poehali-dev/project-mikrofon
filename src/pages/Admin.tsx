@@ -6,6 +6,7 @@ import {
   apiGetReviews, apiSaveReview, apiDeleteReview,
   apiUploadImage,
 } from '@/lib/api'
+import { invalidateContentCache } from '@/hooks/useSiteContent'
 
 type Tab = 'content' | 'buttons' | 'blocks' | 'projects' | 'reviews' | 'settings'
 
@@ -83,9 +84,21 @@ export default function Admin() {
 
   async function saveContent() {
     setSaving(true)
-    await apiSaveContent(content)
+    try {
+      const res = await apiSaveContent(content)
+      if (res?.ok) {
+        invalidateContentCache()
+        await loadAll()
+        showSaved()
+      } else {
+        setSavedMsg('Ошибка: ' + (res?.error || 'не удалось сохранить'))
+        setTimeout(() => setSavedMsg(''), 3000)
+      }
+    } catch {
+      setSavedMsg('Ошибка сети')
+      setTimeout(() => setSavedMsg(''), 3000)
+    }
     setSaving(false)
-    showSaved()
   }
 
   function setContentField(section: string, key: string, value: string) {
