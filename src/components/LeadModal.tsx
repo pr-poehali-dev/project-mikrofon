@@ -17,8 +17,8 @@ export function LeadModal({ open, onClose }: LeadModalProps) {
     setLoading(true)
     try {
       await apiSubmitLead(form.name, form.phone, form.comment)
-    } catch (_) {
-      // показываем успех даже при ошибке сети
+    } catch (err) {
+      console.error("Lead submit error:", err)
     }
     setLoading(false)
     setSent(true)
