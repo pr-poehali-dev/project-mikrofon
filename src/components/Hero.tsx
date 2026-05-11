@@ -1,9 +1,7 @@
 import { useState, useRef } from "react"
 import { LeadModal } from "./LeadModal"
-import { useSiteContent } from "@/hooks/useSiteContent"
 
 export function Hero() {
-  const { get } = useSiteContent()
   const [open, setOpen] = useState(false)
   const pressTime = useRef<number>(0)
   const calcPressTime = useRef<number>(0)
@@ -52,17 +50,17 @@ export function Hero() {
             onClick={handleCalcClick}
             className="inline-flex items-center justify-center gap-2 bg-white text-foreground px-8 text-sm tracking-widest uppercase font-medium hover:bg-stone-100 transition-colors duration-300 my-0 py-5"
           >
-            {get('buttons','hero_primary_text','Рассчитать стоимость')}
+            Рассчитать стоимость
           </button>
 
           <a
-            href={get('buttons','hero_secondary_href','https://max.ru/id421714233013_bot')}
+            href="https://max.ru/id421714233013_bot"
             onMouseDown={recordPress(pressTime)}
             onTouchStart={recordPress(pressTime)}
             onClick={handleMaxClick}
             className="inline-flex items-center justify-center gap-2 border border-white/40 text-white px-8 tracking-widest uppercase font-light hover:bg-white/10 transition-colors duration-300 text-sm rounded-full py-3.5"
           >
-            {get('buttons','hero_secondary_text','Получить концепцию в MAX')}
+            Получить концепцию в MAX
           </a>
         </div>
 

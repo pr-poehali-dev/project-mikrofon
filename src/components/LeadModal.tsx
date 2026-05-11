@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { X } from "lucide-react"
-import { apiSubmitLead } from "@/lib/api"
 
 interface LeadModalProps {
   open: boolean
@@ -10,17 +9,9 @@ interface LeadModalProps {
 export function LeadModal({ open, onClose }: LeadModalProps) {
   const [form, setForm] = useState({ name: "", phone: "", comment: "" })
   const [sent, setSent] = useState(false)
-  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    try {
-      await apiSubmitLead(form.name, form.phone, form.comment)
-    } catch (err) {
-      console.error("Lead submit error:", err)
-    }
-    setLoading(false)
     setSent(true)
   }
 
@@ -58,23 +49,23 @@ export function LeadModal({ open, onClose }: LeadModalProps) {
               <div>
                 <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">Ваше имя</label>
                 <input
-                  className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
                   type="text"
                   required
                   placeholder="Иван"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
                 />
               </div>
               <div>
                 <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">Телефон</label>
                 <input
-                  className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
                   type="tel"
                   required
                   placeholder="+7 ___-___-__-__"
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
                 />
               </div>
               <div>
@@ -98,10 +89,9 @@ export function LeadModal({ open, onClose }: LeadModalProps) {
               </div>
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full bg-foreground text-primary-foreground py-4 text-sm tracking-widest uppercase font-medium hover:bg-foreground/90 transition-colors duration-300 mt-2 disabled:opacity-60"
+                className="w-full bg-foreground text-primary-foreground py-4 text-sm tracking-widest uppercase font-medium hover:bg-foreground/90 transition-colors duration-300 mt-2"
               >
-                {loading ? "Отправляем..." : "Отправить заявку"}
+                Отправить заявку
               </button>
               <p className="text-muted-foreground text-xs text-center">
                 Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности

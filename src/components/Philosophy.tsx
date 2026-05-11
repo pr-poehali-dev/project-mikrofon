@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react"
 import { HighlightedText } from "./HighlightedText"
-import { useSiteContent } from "@/hooks/useSiteContent"
 
 const philosophyItems = [
   {
@@ -26,14 +25,8 @@ const philosophyItems = [
 ]
 
 export function Philosophy() {
-  const { get } = useSiteContent()
   const [visibleItems, setVisibleItems] = useState<number[]>([])
   const itemRefs = useRef<(HTMLDivElement | null)[]>([])
-
-  const items = [1,2,3,4].map(i => ({
-    title: get('philosophy', `item_${i}_title`) || philosophyItems[i-1].title,
-    description: get('philosophy', `item_${i}_desc`) || philosophyItems[i-1].description,
-  }))
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -60,11 +53,11 @@ export function Philosophy() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
           <div className="lg:sticky lg:top-32 lg:self-start">
-            <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6">{get('philosophy','badge','Для кого мы работаем')}</p>
+            <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6">Для кого мы работаем</p>
             <h2 className="text-6xl md:text-6xl font-medium leading-[1.15] tracking-tight mb-6 text-balance lg:text-8xl">
-              {get('philosophy','title','Квартира')}
+              Квартира
               <br />
-              <HighlightedText>{get('philosophy','title_highlight','готова')}</HighlightedText>
+              <HighlightedText>готова</HighlightedText>
             </h2>
 
             <div className="relative hidden lg:block">
@@ -78,10 +71,10 @@ export function Philosophy() {
 
           <div className="space-y-6 lg:pt-48">
             <p className="text-muted-foreground text-lg leading-relaxed max-w-md mb-12">
-              {get('philosophy','subtitle','Мы работаем с жителями Новосибирска, которые купили квартиру и хотят заехать в красивое, готовое пространство — без бесконечных поездок по магазинам и стресса с подрядчиками.')}
+              Мы работаем с жителями Новосибирска, которые купили квартиру и хотят заехать в красивое, готовое пространство — без бесконечных поездок по магазинам и стресса с подрядчиками.
             </p>
 
-            {items.map((item, index) => (
+            {philosophyItems.map((item, index) => (
               <div
                 key={item.title}
                 ref={(el) => {

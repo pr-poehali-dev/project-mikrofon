@@ -1,22 +1,32 @@
 import { useEffect, useRef, useState } from "react"
-import { useSiteContent } from "@/hooks/useSiteContent"
+
+const reviews = [
+  {
+    name: "Анастасия Козлова",
+    location: "ЖК Flora & Fauna",
+    text: "Заехали через 6 недель после подписания договора. Кухня, гардеробная, спальня — всё готово. Я не могу поверить, насколько это удобно. Рекомендую всем, кто покупает квартиру в новостройке.",
+    rating: 5,
+    avatar: "АК",
+  },
+  {
+    name: "Дмитрий Воронов",
+    location: "ЖК Richmond Residence",
+    text: "Думал, что дизайнерская мебель — это дорого и долго. Ребята сделали визуализацию, и я сразу понял, что будет именно так, как я хочу. Всё в срок, цена не изменилась.",
+    rating: 5,
+    avatar: "ДВ",
+  },
+  {
+    name: "Марина Соколова",
+    location: "ЖК Европейский берег",
+    text: "Наконец-то нашли компанию, которая берёт на себя всё целиком. Не нужно было ходить по магазинам и сравнивать. Просто сказала, что хочу, и получила готовый результат.",
+    rating: 5,
+    avatar: "МС",
+  },
+]
 
 export function Reviews() {
-  const { reviews: dbReviews } = useSiteContent()
   const [visibleItems, setVisibleItems] = useState<number[]>([])
   const itemRefs = useRef<(HTMLDivElement | null)[]>([])
-
-  const reviews = dbReviews.length > 0 ? dbReviews.map(r => ({
-    name: r.author,
-    location: r.location,
-    text: r.text,
-    rating: r.rating,
-    avatar: r.author.split(' ').map((w: string) => w[0]).join('').slice(0, 2).toUpperCase(),
-  })) : [
-    { name: "Анастасия Козлова", location: "ЖК Flora & Fauna", text: "Заехали через 6 недель после подписания договора. Кухня, гардеробная, спальня — всё готово. Рекомендую всем, кто покупает квартиру в новостройке.", rating: 5, avatar: "АК" },
-    { name: "Дмитрий Воронов", location: "ЖК Richmond Residence", text: "Думал, что дизайнерская мебель — это дорого и долго. Ребята сделали визуализацию, и я сразу понял, что будет именно так, как я хочу. Всё в срок.", rating: 5, avatar: "ДВ" },
-    { name: "Марина Соколова", location: "ЖК Европейский берег", text: "Наконец-то нашли компанию, которая берёт на себя всё целиком. Просто сказала, что хочу, и получила готовый результат.", rating: 5, avatar: "МС" },
-  ]
 
   useEffect(() => {
     const observer = new IntersectionObserver(
