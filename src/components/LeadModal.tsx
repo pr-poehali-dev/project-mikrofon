@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { X } from "lucide-react"
+import { apiSubmitLead } from "@/lib/api"
 
 interface LeadModalProps {
   open: boolean
@@ -9,9 +10,17 @@ interface LeadModalProps {
 export function LeadModal({ open, onClose }: LeadModalProps) {
   const [form, setForm] = useState({ name: "", phone: "", comment: "" })
   const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
+    try {
+      await apiSubmitLead(form.name, form.phone, form.comment)
+    } catch (err) {
+      console.error("Lead submit error:", err)
+    }
+    setLoading(false)
     setSent(true)
   }
 
@@ -89,9 +98,10 @@ export function LeadModal({ open, onClose }: LeadModalProps) {
               </div>
               <button
                 type="submit"
-                className="w-full bg-foreground text-primary-foreground py-4 text-sm tracking-widest uppercase font-medium hover:bg-foreground/90 transition-colors duration-300 mt-2"
+                disabled={loading}
+                className="w-full bg-foreground text-primary-foreground py-4 text-sm tracking-widest uppercase font-medium hover:bg-foreground/90 transition-colors duration-300 mt-2 disabled:opacity-60"
               >
-                Отправить заявку
+                {loading ? "Отправляем..." : "Отправить заявку"}
               </button>
               <p className="text-muted-foreground text-xs text-center">
                 Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности
