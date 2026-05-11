@@ -9,21 +9,22 @@ interface Project {
 interface AdminProjectsTabProps {
   projects: Project[]
   saving: boolean
-  setSaving: (v: boolean) => void
   onSave: (project: Partial<Project>) => void
   onDelete: (id: number) => void
+  onUploadStart: () => void
+  onUploadEnd: () => void
 }
 
-export default function AdminProjectsTab({ projects, saving, setSaving, onSave, onDelete }: AdminProjectsTabProps) {
+export default function AdminProjectsTab({ projects, saving, onSave, onDelete, onUploadStart, onUploadEnd }: AdminProjectsTabProps) {
   const [editProject, setEditProject] = useState<Partial<Project> | null>(null)
   const [newGalleryUrl, setNewGalleryUrl] = useState('')
-  const [uploadTarget, setUploadTarget] = useState<'project_main' | 'project_gallery' | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [uploadTarget, setUploadTarget] = useState<'project_main' | 'project_gallery' | null>(null)
 
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file || !uploadTarget) return
-    setSaving(true)
+    onUploadStart()
     try {
       const url = await apiUploadImage(file)
       if (uploadTarget === 'project_main') {
@@ -32,9 +33,11 @@ export default function AdminProjectsTab({ projects, saving, setSaving, onSave, 
         setEditProject(prev => prev ? { ...prev, gallery: [...(prev.gallery || []), url] } : prev)
       }
     } catch { alert('Ошибка загрузки фото') }
-    setSaving(false)
+    onUploadEnd()
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
+
+  const inp = "w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background"
 
   return (
     <div className="space-y-6">
@@ -57,8 +60,8 @@ export default function AdminProjectsTab({ projects, saving, setSaving, onSave, 
             ].map(({ key, label }) => (
               <div key={key}>
                 <label className="block text-sm text-muted-foreground mb-1">{label}</label>
-                <input className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background"
-                  value={(editProject as Record<string, unknown>)[key] as string || ''}
+                <input className={inp}
+                  value={(editProject as Record<string, string>)[key] || ''}
                   onChange={e => setEditProject(p => p ? { ...p, [key]: e.target.value } : p)} />
               </div>
             ))}

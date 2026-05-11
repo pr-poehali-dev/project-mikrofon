@@ -7,57 +7,62 @@ interface AdminContentTabProps {
 }
 
 export default function AdminContentTab({ tab, content, saving, onSave, onFieldChange }: AdminContentTabProps) {
-  const btnSave = (
+  const inp = "w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background"
+  const ta = inp + " resize-none"
+
+  const saveBtn = (
     <button onClick={onSave} disabled={saving}
       className="bg-foreground text-background px-6 py-2 text-sm hover:opacity-90 disabled:opacity-50 transition-opacity">
       {saving ? 'Сохранение...' : 'Сохранить'}
     </button>
   )
 
+  function renderFields(section: string, fields: { key: string; label: string; multiline?: boolean }[]) {
+    return fields.map(({ key, label, multiline }) => (
+      <div key={key}>
+        <label className="block text-sm text-muted-foreground mb-1">{label}</label>
+        {multiline ? (
+          <textarea rows={3} className={ta}
+            value={content[section]?.[key] || ''}
+            onChange={e => onFieldChange(section, key, e.target.value)} />
+        ) : (
+          <input className={inp}
+            value={content[section]?.[key] || ''}
+            onChange={e => onFieldChange(section, key, e.target.value)} />
+        )}
+      </div>
+    ))
+  }
+
   if (tab === 'content') return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-medium">Тексты сайта</h2>
-        {btnSave}
+        {saveBtn}
       </div>
       {[
         { section: 'hero', label: 'Главный экран', fields: [
-          { key: 'title', label: 'Заголовок', multiline: false },
+          { key: 'title', label: 'Заголовок' },
           { key: 'subtitle', label: 'Подзаголовок', multiline: true },
-          { key: 'cta_primary', label: 'Кнопка 1', multiline: false },
-          { key: 'cta_secondary', label: 'Кнопка 2', multiline: false },
+          { key: 'cta_primary', label: 'Кнопка 1' },
+          { key: 'cta_secondary', label: 'Кнопка 2' },
         ]},
         { section: 'contacts', label: 'Контакты', fields: [
-          { key: 'phone', label: 'Телефон (отображение)', multiline: false },
-          { key: 'phone_href', label: 'Телефон (ссылка tel:)', multiline: false },
-          { key: 'whatsapp_href', label: 'Ссылка WhatsApp/MAX', multiline: false },
-          { key: 'telegram', label: 'Telegram', multiline: false },
-          { key: 'vk_href', label: 'Ссылка ВКонтакте', multiline: false },
+          { key: 'phone', label: 'Телефон (отображение)' },
+          { key: 'phone_href', label: 'Телефон (ссылка tel:)' },
+          { key: 'whatsapp_href', label: 'Ссылка WhatsApp/MAX' },
+          { key: 'telegram', label: 'Telegram' },
+          { key: 'vk_href', label: 'Ссылка ВКонтакте' },
         ]},
         { section: 'footer', label: 'Футер', fields: [
-          { key: 'company_name', label: 'Название компании', multiline: false },
+          { key: 'company_name', label: 'Название компании' },
           { key: 'description', label: 'Описание', multiline: true },
-          { key: 'copyright', label: 'Копирайт', multiline: false },
+          { key: 'copyright', label: 'Копирайт' },
         ]},
       ].map(({ section, label, fields }) => (
         <div key={section} className="border border-border p-6">
           <h3 className="font-medium mb-4 text-muted-foreground text-sm uppercase tracking-wider">{label}</h3>
-          <div className="space-y-4">
-            {fields.map(({ key, label: fl, multiline }) => (
-              <div key={key}>
-                <label className="block text-sm text-muted-foreground mb-1">{fl}</label>
-                {multiline ? (
-                  <textarea rows={3} className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background resize-none"
-                    value={content[section]?.[key] || ''}
-                    onChange={e => onFieldChange(section, key, e.target.value)} />
-                ) : (
-                  <input className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background"
-                    value={content[section]?.[key] || ''}
-                    onChange={e => onFieldChange(section, key, e.target.value)} />
-                )}
-              </div>
-            ))}
-          </div>
+          <div className="space-y-4">{renderFields(section, fields)}</div>
         </div>
       ))}
     </div>
@@ -67,7 +72,7 @@ export default function AdminContentTab({ tab, content, saving, onSave, onFieldC
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-medium">Кнопки сайта</h2>
-        {btnSave}
+        {saveBtn}
       </div>
       {[
         { label: 'Шапка сайта', fields: [
@@ -93,7 +98,7 @@ export default function AdminContentTab({ tab, content, saving, onSave, onFieldC
             {fields.map(({ key, label: fl }) => (
               <div key={key}>
                 <label className="block text-sm text-muted-foreground mb-1">{fl}</label>
-                <input className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background"
+                <input className={inp}
                   value={content['buttons']?.[key] || ''}
                   onChange={e => onFieldChange('buttons', key, e.target.value)} />
               </div>
@@ -108,7 +113,7 @@ export default function AdminContentTab({ tab, content, saving, onSave, onFieldC
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-medium">Блоки сайта</h2>
-        {btnSave}
+        {saveBtn}
       </div>
       {[
         { section: 'philosophy', label: 'Блок "Для кого мы работаем"', fields: [
@@ -178,28 +183,13 @@ export default function AdminContentTab({ tab, content, saving, onSave, onFieldC
           { key: 'step_7_title', label: 'Шаг 7 — название' }, { key: 'step_7_desc', label: 'Шаг 7 — описание', multiline: true },
         ]},
         { section: 'cta', label: 'Блок призыва к действию (внизу)', fields: [
-          { key: 'title', label: 'Заголовок', multiline: false },
+          { key: 'title', label: 'Заголовок' },
           { key: 'subtitle', label: 'Подзаголовок', multiline: true },
         ]},
       ].map(({ section, label, fields }) => (
         <div key={section} className="border border-border p-6">
           <h3 className="font-medium mb-4 text-muted-foreground text-sm uppercase tracking-wider">{label}</h3>
-          <div className="space-y-3">
-            {fields.map(({ key, label: fl, multiline }) => (
-              <div key={key}>
-                <label className="block text-sm text-muted-foreground mb-1">{fl}</label>
-                {multiline ? (
-                  <textarea rows={2} className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background resize-none"
-                    value={content[section]?.[key] || ''}
-                    onChange={e => onFieldChange(section, key, e.target.value)} />
-                ) : (
-                  <input className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground bg-background"
-                    value={content[section]?.[key] || ''}
-                    onChange={e => onFieldChange(section, key, e.target.value)} />
-                )}
-              </div>
-            ))}
-          </div>
+          <div className="space-y-3">{renderFields(section, fields)}</div>
         </div>
       ))}
     </div>
