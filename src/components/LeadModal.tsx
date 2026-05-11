@@ -57,7 +57,7 @@ export function LeadModal({ open, onClose }: LeadModalProps) {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">Ваше имя</label>
-                <input
+                <input className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors text-[#000000]"
                   type="text"
                   required
                   placeholder="Иван"
@@ -68,7 +68,7 @@ export function LeadModal({ open, onClose }: LeadModalProps) {
               </div>
               <div>
                 <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">Телефон</label>
-                <input
+                <input className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors text-[#000000]"
                   type="tel"
                   required
                   placeholder="+7 ___-___-__-__"
