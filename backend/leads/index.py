@@ -91,8 +91,9 @@ def handler(event: dict, context) -> dict:
 
     try:
         send_email(name, phone, contact_method)
-    except Exception:
-        pass
+        print("EMAIL OK")
+    except Exception as e:
+        print(f"EMAIL ERROR: {e}")
 
     send_telegram(
         f"🔔 <b>Новая заявка с сайта!</b>\n\n"
