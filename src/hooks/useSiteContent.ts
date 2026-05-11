@@ -31,20 +31,22 @@ export function useSiteContent() {
   const [reviews, setReviews] = useState<Review[]>(reviewsCache || [])
   const [loaded, setLoaded] = useState(!!contentCache)
 
-  const load = () => {
-    Promise.all([apiGetContent(), apiGetProjects(), apiGetReviews()]).then(([c, p, r]) => {
-      contentCache = c
-      projectsCache = p
-      reviewsCache = r
-      setContent(c)
-      setProjects(p)
-      setReviews(r)
-      setLoaded(true)
-    }).catch(() => setLoaded(true))
-  }
-
   useEffect(() => {
+    const load = () => {
+      Promise.all([apiGetContent(), apiGetProjects(), apiGetReviews()]).then(([c, p, r]) => {
+        contentCache = c
+        projectsCache = p
+        reviewsCache = r
+        setContent(c)
+        setProjects(p)
+        setReviews(r)
+        setLoaded(true)
+      }).catch(() => setLoaded(true))
+    }
+
     if (!contentCache || !projectsCache || !reviewsCache) load()
+    else setLoaded(true)
+
     window.addEventListener('content-updated', load)
     return () => window.removeEventListener('content-updated', load)
   }, [])
