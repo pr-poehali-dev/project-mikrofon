@@ -18,13 +18,6 @@ let contentCache: SiteContent | null = null
 let projectsCache: Project[] | null = null
 let reviewsCache: Review[] | null = null
 
-export function invalidateContentCache() {
-  contentCache = null
-  projectsCache = null
-  reviewsCache = null
-  window.dispatchEvent(new Event('content-updated'))
-}
-
 export function useSiteContent() {
   const [content, setContent] = useState<SiteContent>(contentCache || {})
   const [projects, setProjects] = useState<Project[]>(projectsCache || [])
@@ -32,23 +25,16 @@ export function useSiteContent() {
   const [loaded, setLoaded] = useState(!!contentCache)
 
   useEffect(() => {
-    const load = () => {
-      Promise.all([apiGetContent(), apiGetProjects(), apiGetReviews()]).then(([c, p, r]) => {
-        contentCache = c
-        projectsCache = p
-        reviewsCache = r
-        setContent(c)
-        setProjects(p)
-        setReviews(r)
-        setLoaded(true)
-      }).catch(() => setLoaded(true))
-    }
-
-    if (!contentCache || !projectsCache || !reviewsCache) load()
-    else setLoaded(true)
-
-    window.addEventListener('content-updated', load)
-    return () => window.removeEventListener('content-updated', load)
+    if (contentCache && projectsCache && reviewsCache) return
+    Promise.all([apiGetContent(), apiGetProjects(), apiGetReviews()]).then(([c, p, r]) => {
+      contentCache = c
+      projectsCache = p
+      reviewsCache = r
+      setContent(c)
+      setProjects(p)
+      setReviews(r)
+      setLoaded(true)
+    }).catch(() => setLoaded(true))
   }, [])
 
   const get = (section: string, key: string, fallback = '') =>
