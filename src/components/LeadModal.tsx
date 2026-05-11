@@ -57,24 +57,24 @@ export function LeadModal({ open, onClose }: LeadModalProps) {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">Ваше имя</label>
-                <input className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors text-[#000000]"
+                <input
+                  className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
                   type="text"
                   required
                   placeholder="Иван"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
                 />
               </div>
               <div>
                 <label className="text-xs tracking-widest uppercase text-muted-foreground block mb-2">Телефон</label>
-                <input className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors text-[#000000]"
+                <input
+                  className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
                   type="tel"
                   required
                   placeholder="+7 ___-___-__-__"
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  className="w-full border border-border bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-foreground transition-colors"
                 />
               </div>
               <div>

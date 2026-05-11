@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import { apiGetContent, apiGetProjects, apiGetReviews } from '@/lib/api'
+import { useState } from 'react'
 
 interface SiteContent {
   [section: string]: { [key: string]: string }
@@ -14,31 +13,13 @@ interface Review {
   id: number; author: string; location: string; text: string; rating: number; sort_order: number
 }
 
-let contentCache: SiteContent | null = null
-let projectsCache: Project[] | null = null
-let reviewsCache: Review[] | null = null
-
 export function useSiteContent() {
-  const [content, setContent] = useState<SiteContent>(contentCache || {})
-  const [projects, setProjects] = useState<Project[]>(projectsCache || [])
-  const [reviews, setReviews] = useState<Review[]>(reviewsCache || [])
-  const [loaded, setLoaded] = useState(!!contentCache)
-
-  useEffect(() => {
-    if (contentCache && projectsCache && reviewsCache) return
-    Promise.all([apiGetContent(), apiGetProjects(), apiGetReviews()]).then(([c, p, r]) => {
-      contentCache = c
-      projectsCache = p
-      reviewsCache = r
-      setContent(c)
-      setProjects(p)
-      setReviews(r)
-      setLoaded(true)
-    }).catch(() => setLoaded(true))
-  }, [])
+  const [content] = useState<SiteContent>({})
+  const [projects] = useState<Project[]>([])
+  const [reviews] = useState<Review[]>([])
 
   const get = (section: string, key: string, fallback = '') =>
     content[section]?.[key] ?? fallback
 
-  return { content, projects, reviews, loaded, get }
+  return { content, projects, reviews, loaded: true, get }
 }
